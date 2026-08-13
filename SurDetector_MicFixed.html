@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  SurDetector.html — Indian Classical Sur (Pitch) Detector
+  HOW TO USE:
+  1) Save this file as "SurDetector.html" on your computer
+  2) Double-click it — it opens in your browser (mic will work)
+  3) Click "Start Listening", allow the mic, and sing!
+  No mic? Use the "Upload Recording" mode inside the page.
+  ═══════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SurDetector — सुर परीक्षण · Indian Classical Pitch Tuner</title>
+<style>
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/400.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/500.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/600.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/700.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/rozha-one@5.0.8/400.css');
+
+:root{
+  --bg:#150922;
+  --panel:#241236;
+  --panel2:#2d1745;
+  --gold:#e9b949;
+  --gold2:#f6d47e;
+  --saffron:#ff8f2b;
+  --cream:#f6ead2;
+  --dim:#b8a68c;
+  --red:#ff5d6c;
+  --green:#3ddc84;
+  --amber:#ffb84d;
+  --teal:#2ec4b6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Poppins',sans-serif;
+  color:var(--cream);
+  min-height:100vh;
+  background:
+    radial-gradient(1100px 600px at 88% -10%, rgba(255,143,43,.16), transparent 60%),
+    radial-gradient(900px 520px at -12% 108%, rgba(46,196,182,.12), transparent 60%),
+    radial-gradient(760px 420px at 50% 118%, rgba(233,185,73,.10), transparent 70%),
+    var(--bg);
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.9;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='130' height='130' viewBox='0 0 130 130'><g fill='none' stroke='%23e9b949' stroke-opacity='0.06'><circle cx='65' cy='65' r='24'/><circle cx='65' cy='65' r='11'/><path d='M65 29v13M65 88v13M29 65h13M88 65h13M41 41l9 9M80 80l9 9M89 41l-9 9M50 80l-9 9'/><circle cx='0' cy='0' r='7'/><circle cx='130' cy='0' r='7'/><circle cx='0' cy='130' r='7'/><circle cx='130' cy='130' r='7'/></g></svg>");
+  background-size:130px 130px;
+}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:26px 18px 40px}
+
+header{text-align:center;margin-bottom:18px}
+.titleRow{display:flex;align-items:center;justify-content:center;gap:16px}
+.om{font-family:'Rozha One',serif;font-size:26px;color:var(--gold);text-shadow:0 0 18px rgba(233,185,73,.55);animation:glowPulse 3.2s ease-in-out infinite}
+h1{font-family:'Rozha One',serif;font-weight:400;font-size:clamp(34px,6vw,52px);letter-spacing:.5px;color:var(--gold2);text-shadow:0 2px 24px rgba(233,185,73,.35)}
+h1 em{font-style:normal;color:var(--saffron)}
+.tag{margin-top:6px;color:var(--dim);font-size:14px;letter-spacing:.4px}
+.tag b{color:var(--cream);font-weight:500}
+.rule{width:min(420px,80%);height:14px;margin:10px auto 0;position:relative}
+.rule::before,.rule::after{content:'';position:absolute;top:6px;height:1px;width:calc(50% - 18px);background:linear-gradient(90deg,transparent,var(--gold))}
+.rule::before{left:0}
+.rule::after{right:0;transform:scaleX(-1)}
+.rule i{position:absolute;left:50%;top:0;transform:translateX(-50%);color:var(--gold);font-style:normal;font-size:13px}
+@keyframes glowPulse{0%,100%{opacity:.75}50%{opacity:1}}
+
+.toolbar{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;margin:20px 0 6px}
+#startBtn{
+  position:relative;font-family:'Poppins';font-weight:600;font-size:16px;letter-spacing:.3px;
+  color:#2a1200;background:linear-gradient(180deg,var(--gold2),var(--gold) 55%,#c98f2c);
+  border:none;border-radius:999px;padding:14px 34px;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 22px rgba(233,185,73,.35),inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+#startBtn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(233,185,73,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+#startBtn:active{transform:translateY(0)}
+#startBtn.listening{background:linear-gradient(180deg,#ff8d97,#e6455a);color:#fff;box-shadow:0 6px 22px rgba(255,93,108,.4)}
+#startBtn:not(.listening)::after{
+  content:'';position:absolute;inset:-6px;border-radius:999px;border:2px solid rgba(233,185,73,.55);
+  animation:ring 2s ease-out infinite;pointer-events:none;
+}
+@keyframes ring{0%{transform:scale(.95);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--dim);
+  border:1px solid rgba(233,185,73,.3);border-radius:999px;padding:8px 16px;background:rgba(36,18,54,.6)}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:#6b5c47}
+.chip.live{color:#bdf7d6;border-color:rgba(61,220,132,.45)}
+.chip.live .dot{background:var(--green);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:beat 1.4s infinite}
+.chip.filemode{color:#a7efe8;border-color:rgba(46,196,182,.5)}
+.chip.filemode .dot{background:var(--teal);box-shadow:0 0 0 0 rgba(46,196,182,.6);animation:beat 1.4s infinite}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(61,220,132,.6)}70%{box-shadow:0 0 0 9px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+.err{max-width:680px;margin:12px auto 0;padding:12px 16px;border-radius:12px;font-size:13.5px;line-height:1.6;
+  background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.45);color:#ffc9cf;text-align:center}
+.err b{color:#fff}
+
+.grid{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;margin-top:22px}
+@media(max-width:920px){.grid{grid-template-columns:1fr}}
+.panel{
+  position:relative;border-radius:20px;padding:22px 22px 20px;
+  background:linear-gradient(165deg,var(--panel2) 0%,var(--panel) 55%,#1c0d2e 100%);
+  border:1px solid rgba(233,185,73,.32);
+  box-shadow:0 18px 44px rgba(0,0,0,.45),inset 0 1px 0 rgba(246,212,126,.12);
+}
+.panel::before{
+  content:'❁';position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  color:var(--gold);font-size:15px;background:var(--panel);padding:0 12px;line-height:1;
+}
+.panelHead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:2px 2px 14px;
+  font-weight:600;font-size:15px;color:var(--gold2);letter-spacing:.4px}
+.panelHead .hint{font-size:11.5px;font-weight:500;color:var(--dim)}
+.panelHead.small{margin-top:20px}
+
+#gauge{width:100%;height:212px;display:block}
+.bigWrap{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0 12px;flex-wrap:wrap}
+.bigSwara{
+  font-family:'Rozha One',serif;font-size:clamp(58px,10vw,84px);line-height:1.05;color:var(--gold2);
+  min-width:96px;text-align:center;text-shadow:0 0 26px rgba(233,185,73,.35);
+  transition:color .2s ease,text-shadow .2s ease,transform .2s ease;
+}
+.bigSwara.intune{color:var(--green);text-shadow:0 0 30px rgba(61,220,132,.65);transform:scale(1.04)}
+.bigSwara.komal .glyph{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:6px}
+.bigSwara.tivra .glyph{text-decoration:overline;text-decoration-color:var(--saffron);text-decoration-thickness:3px}
+.swaraMeta{display:flex;flex-direction:column;gap:3px}
+.swaraMeta b{font-size:18px;font-weight:600}
+.swaraMeta span{font-size:12.5px;color:var(--dim)}
+.swaraMeta .codeTag{display:inline-block;margin-top:2px;font-size:11px;font-weight:600;color:#2a1200;background:var(--gold);border-radius:6px;padding:2px 8px;width:fit-content}
+.readouts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:420px){.readouts{grid-template-columns:1fr 1fr}}
+.ro{background:rgba(0,0,0,.24);border:1px solid rgba(233,185,73,.22);border-radius:12px;padding:9px 10px;text-align:center}
+.ro small{display:block;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.ro b{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.ro b.pos{color:var(--red)}.ro b.neg{color:var(--amber)}.ro b.zero{color:var(--green)}
+.verdict{
+  text-align:center;font-weight:600;font-size:15px;border-radius:14px;padding:11px 14px;margin-bottom:14px;
+  border:1px solid rgba(233,185,73,.25);background:rgba(0,0,0,.22);color:var(--dim);
+  transition:all .25s ease;
+}
+.verdict.good{background:rgba(61,220,132,.14);border-color:rgba(61,220,132,.6);color:#a9f5c9;box-shadow:0 0 24px rgba(61,220,132,.15)}
+.verdict.ok{background:rgba(255,184,77,.12);border-color:rgba(255,184,77,.55);color:#ffdca3}
+.verdict.bad{background:rgba(255,93,108,.13);border-color:rgba(255,93,108,.55);color:#ffb3ba}
+#wave{width:100%;height:60px;display:block;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid rgba(233,185,73,.18)}
+
+.saRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stepBtn{
+  width:42px;height:46px;border-radius:12px;border:1px solid rgba(233,185,73,.4);cursor:pointer;
+  background:rgba(0,0,0,.25);color:var(--gold2);font-size:20px;font-weight:600;transition:all .15s;touch-action:manipulation;
+}
+.stepBtn:hover{background:rgba(233,185,73,.16);transform:translateY(-1px)}
+.stepBtn:disabled{opacity:.3;cursor:default;transform:none}
+#saSelect{
+  flex:1;min-width:130px;height:46px;border-radius:12px;padding:0 12px;font-family:'Poppins';font-size:14.5px;font-weight:600;
+  background:rgba(0,0,0,.3);color:var(--cream);border:1px solid rgba(233,185,73,.4);cursor:pointer;outline:none;
+}
+#saSelect option{background:#241236;color:var(--cream)}
+#saFreqLabel{margin-top:8px;font-size:12.5px;color:var(--dim)}
+#saFreqLabel b{color:var(--gold2);font-weight:600}
+#droneBtn{
+  width:100%;margin-top:14px;height:48px;border-radius:14px;font-family:'Poppins';font-weight:600;font-size:14.5px;cursor:pointer;
+  border:1px solid rgba(46,196,182,.5);background:rgba(46,196,182,.1);color:#a7efe8;
+  transition:all .2s;touch-action:manipulation;
+}
+#droneBtn:hover{background:rgba(46,196,182,.2)}
+#droneBtn.on{background:linear-gradient(180deg,#3adecf,#1a9e92);color:#04302b;border-color:transparent;box-shadow:0 6px 20px rgba(46,196,182,.4)}
+
+.uploadCard{
+  margin-top:16px;border:1.5px dashed rgba(46,196,182,.55);border-radius:16px;padding:14px;
+  background:rgba(46,196,182,.06);
+}
+.uploadCard .ucTitle{font-weight:600;font-size:14px;color:#a7efe8;margin-bottom:4px}
+.uploadCard .ucSub{font-size:11.5px;color:var(--dim);line-height:1.55;margin-bottom:10px}
+.uploadBtns{display:flex;gap:8px;flex-wrap:wrap}
+#uploadBtn{
+  flex:1;min-width:150px;height:46px;border-radius:12px;font-family:'Poppins';font-weight:600;font-size:13.5px;cursor:pointer;
+  border:1px solid rgba(46,196,182,.6);background:rgba(46,196,182,.14);color:#c9f6f1;transition:all .18s;touch-action:manipulation;
+}
+#uploadBtn:hover{background:rgba(46,196,182,.28);transform:translateY(-1px)}
+#playFileBtn{
+  flex:1;min-width:130px;height:46px;border-radius:12px;font-family:'Poppins';font-weight:600;font-size:13.5px;cursor:pointer;
+  border:none;background:linear-gradient(180deg,#ffd98a,var(--gold));color:#2a1200;transition:all .18s;touch-action:manipulation;
+  box-shadow:0 4px 14px rgba(233,185,73,.35);
+}
+#playFileBtn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(233,185,73,.5)}
+#playFileBtn.playing{background:linear-gradient(180deg,#ff8d97,#e6455a);color:#fff}
+#playFileBtn:disabled{opacity:.4;cursor:default;transform:none}
+#fileStatus{margin-top:9px;font-size:12px;color:var(--dim);min-height:16px;line-height:1.5}
+#fileStatus.ok{color:#a9f5c9}
+#fileStatus.err2{color:#ffb3ba}
+.whyNote{margin-top:10px;font-size:10.8px;line-height:1.6;color:#8d7c63}
+.whyNote code{background:rgba(0,0,0,.35);border-radius:4px;padding:1px 5px;color:#d8c69a;font-size:10px;word-break:break-all}
+
+#sargam{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
+@media(max-width:640px){#sargam{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.key{
+  border-radius:10px;border:1px solid rgba(233,185,73,.3);background:rgba(0,0,0,.28);cursor:pointer;
+  padding:9px 2px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:transform .12s ease, background .15s ease, box-shadow .15s ease, border-color .15s;touch-action:manipulation;
+}
+.key:hover{background:rgba(233,185,73,.14);transform:translateY(-2px)}
+.key .dev{font-family:'Rozha One',serif;font-size:20px;line-height:1.1;color:var(--cream)}
+.key .dev.komal{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px}
+.key .dev.tivra{text-decoration:overline;text-decoration-color:var(--saffron);text-decoration-thickness:2px}
+.key .code{font-size:10px;font-weight:600;color:var(--dim)}
+.key.active{
+  background:linear-gradient(180deg,#ffb25e,var(--saffron));border-color:#ffd9a8;
+  transform:translateY(-3px) scale(1.05);box-shadow:0 8px 22px rgba(255,143,43,.5);
+}
+.key.active .dev,.key.active .code{color:#2a1200;text-decoration-color:#2a1200}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.stat{background:rgba(0,0,0,.24);border:1px solid rgba(233,185,73,.22);border-radius:12px;padding:11px 12px;text-align:center}
+.stat small{display:block;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.stat b{font-size:20px;font-weight:700;color:var(--gold2);font-variant-numeric:tabular-nums}
+.tip{margin-top:16px;font-size:12px;line-height:1.65;color:var(--dim);background:rgba(233,185,73,.07);
+  border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:10px 12px}
+.tip b{color:var(--gold2);font-weight:600}
+footer{text-align:center;margin-top:28px;font-size:12px;color:#7d6d55}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="titleRow">
+      <span class="om">ॐ</span>
+      <h1>Sur<em>Detector</em></h1>
+      <span class="om">ॐ</span>
+    </div>
+    <p class="tag"><b>सुर परीक्षण</b> · Indian Classical Vocal Pitch Checker — sing, and see if your <b>sur</b> is perfect</p>
+    <div class="rule"><i>✦ ✦ ✦</i></div>
+  </header>
+
+  <div class="toolbar">
+    <button id="startBtn">🎤 Start Listening</button>
+    <div id="statusChip" class="chip"><span class="dot"></span><span id="statusTxt">Ready</span></div>
+  </div>
+  <div id="errBox" class="err" hidden></div>
+
+  <main class="grid">
+
+    <section class="panel">
+      <div class="panelHead">🎯 Sur Tuner <span class="hint">needle in green = perfect sur (±10¢)</span></div>
+      <canvas id="gauge"></canvas>
+      <div class="bigWrap">
+        <div id="swaraDev" class="bigSwara"><span class="glyph">—</span></div>
+        <div class="swaraMeta">
+          <b id="swaraName">Sing to detect your swar</b>
+          <span id="swaraCodeLine">Matching against your selected Sa</span>
+          <span class="codeTag" id="swaraCodeTag">—</span>
+        </div>
+      </div>
+      <div class="readouts">
+        <div class="ro"><small>Frequency</small><b id="freqVal">— Hz</b></div>
+        <div class="ro"><small>Deviation</small><b id="centsVal">—</b></div>
+        <div class="ro"><small>Saptak</small><b id="saptakVal">—</b></div>
+      </div>
+      <div id="verdict" class="verdict idle">🎤 Start the mic — or upload a recording on the right — then sing (गुनगुनाइए)</div>
+      <canvas id="wave"></canvas>
+    </section>
+
+    <section class="panel">
+      <div class="panelHead">🪕 Your Sa (Base Note)</div>
+      <div class="saRow">
+        <button class="stepBtn" id="saMinus" aria-label="Lower Sa">−</button>
+        <select id="saSelect" aria-label="Select Sa"></select>
+        <button class="stepBtn" id="saPlus" aria-label="Higher Sa">+</button>
+      </div>
+      <div id="saFreqLabel">Sa = <b>D4</b> · <b>293.7 Hz</b> — set this to match your tanpura / harmonium</div>
+      <button id="droneBtn">🪕 Tanpura Drone : OFF</button>
+
+      <div class="uploadCard">
+        <div class="ucTitle">📼 Mic blocked? Upload your recording</div>
+        <div class="ucSub">Record yourself on your phone 📱, then pick the audio file — the tuner will analyze your sur while it plays. <b>No mic permission needed.</b></div>
+        <div class="uploadBtns">
+          <button id="uploadBtn">📁 Choose audio file…</button>
+          <button id="playFileBtn" disabled>▶ Play &amp; Check Sur</button>
+        </div>
+        <input type="file" id="fileInput" accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.opus,.webm" hidden>
+        <div id="fileStatus">No file selected (MP3 / M4A / WAV / voice notes)</div>
+        <div class="whyNote">
+          Why is the mic sometimes blocked? Browsers allow live mic access only on <b>HTTPS or localhost</b> — a browser security rule.
+          Fixes: ① open this HTML file directly by <b>double-clicking</b> it (file:// counts as secure),
+          ② in Chrome, add this site via <code>chrome://flags/#unsafely-treat-insecure-origin-as-secure</code>,
+          ③ or just use this upload mode. 🙏
+        </div>
+      </div>
+
+      <div class="panelHead small">🎼 Sargam <span class="hint">tap any swar to hear it</span></div>
+      <div id="sargam"></div>
+
+      <div class="stats">
+        <div class="stat"><small>Sur Accuracy (8s)</small><b id="accVal">—</b></div>
+        <div class="stat"><small>In-Tune Streak</small><b id="streakVal">0.0s</b></div>
+      </div>
+
+      <p class="tip">
+        <b>Riyaz tip:</b> Sa and Pa are always <b>shuddha</b> (never komal/tivra). Underlined letters (रे ग ध नि) are
+        <b>komal</b> swars, overlined म is <b>tivra Ma</b>. Keep the needle inside the green zone — that means you are singing in <b>sur</b>.
+        For uploads, record <b>solo voice</b> (no tanpura in the background) for best detection. 🎶
+      </p>
+    </section>
+  </main>
+
+  <footer>बैठक से रियाज़ करें · Made for Indian classical vocal practice 🎶</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= DATA ================= */
+const SWARAS = [
+  {semi:0,  code:'Sa',  dev:'स',  full:'Shadja (Sa)',     komal:false, tivra:false},
+  {semi:1,  code:'re',  dev:'रे', full:'Komal Re',        komal:true,  tivra:false},
+  {semi:2,  code:'Re',  dev:'रे', full:'Shuddha Re',      komal:false, tivra:false},
+  {semi:3,  code:'ga',  dev:'ग',  full:'Komal Ga',        komal:true,  tivra:false},
+  {semi:4,  code:'Ga',  dev:'ग',  full:'Shuddha Ga',      komal:false, tivra:false},
+  {semi:5,  code:'ma',  dev:'म',  full:'Shuddha Ma',      komal:false, tivra:false},
+  {semi:6,  code:'Ma',  dev:'म',  full:'Tivra Ma',        komal:false, tivra:true},
+  {semi:7,  code:'Pa',  dev:'प',  full:'Pancham (Pa)',    komal:false, tivra:false},
+  {semi:8,  code:'dha', dev:'ध',  full:'Komal Dha',       komal:true,  tivra:false},
+  {semi:9,  code:'Dha', dev:'ध',  full:'Shuddha Dha',     komal:false, tivra:false},
+  {semi:10, code:'ni',  dev:'नि', full:'Komal Ni',        komal:true,  tivra:false},
+  {semi:11, code:'Ni',  dev:'नि', full:'Shuddha Ni',      komal:false, tivra:false},
+];
+const NOTE_NAMES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const saOptions=[];
+for(let midi=48; midi<=72; midi++){
+  const oct=Math.floor(midi/12)-1;
+  saOptions.push({midi, name:NOTE_NAMES[midi%12]+oct, freq:440*Math.pow(2,(midi-69)/12)});
+}
+let saIndex = saOptions.findIndex(o=>o.name==='D4');
+const saFreq = ()=>saOptions[saIndex].freq;
+const saName = ()=>saOptions[saIndex].name;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+
+/* ================= AUDIO CORE ================= */
+let audioCtx=null, masterGain=null, analyser=null, micStream=null, micSrc=null;
+let mode=null; // 'mic' | 'file' | null
+const buf=new Float32Array(4096); // high-resolution analysis buffer
+const pitchHist=[];
+let lastVoicedAt=0;
+
+function ensureCtx(){
+  if(!audioCtx){
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    masterGain=audioCtx.createGain();
+    masterGain.gain.value=0.9;
+    masterGain.connect(audioCtx.destination);
+  }
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function ensureAnalyser(){
+  if(!analyser){
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=4096; // larger window = more accurate frequency
+    analyser.smoothingTimeConstant=0;
+  }
+  return analyser;
+}
+
+/* Autocorrelation pitch detection (65–1200 Hz, parabolic interpolation) */
+function detectPitch(b, sr){
+  const N=b.length;
+  let rms=0;
+  for(let i=0;i<N;i++){const v=b[i];rms+=v*v;}
+  rms=Math.sqrt(rms/N);
+  if(rms<0.008) return -1;
+  const minLag=Math.max(2,Math.floor(sr/1200));
+  const maxLag=Math.min(N-2,Math.floor(sr/65));
+  if(maxLag<=minLag) return -1;
+  const L=maxLag-minLag+1;
+  const corr=new Float32Array(L);
+  for(let li=0;li<L;li++){
+    const lag=minLag+li;
+    let s=0;
+    for(let i=0;i<N-lag;i++) s+=b[i]*b[i+lag];
+    corr[li]=s;
+  }
+  let d=0;
+  while(d<L-1 && corr[d]>corr[d+1]) d++;
+  let maxv=-Infinity,maxi=d;
+  for(let i=d;i<L;i++){ if(corr[i]>maxv){maxv=corr[i];maxi=i;} }
+  if(maxv < 0.2*rms*rms*N) return -1; // confidence gate
+  let lag=minLag+maxi;
+  if(maxi>0 && maxi<L-1){
+    const x1=corr[maxi-1], x2=corr[maxi], x3=corr[maxi+1];
+    const den=(x1+x3-2*x2);
+    if(den!==0){
+      const shift=0.5*(x3-x1)/den;
+      if(Math.abs(shift)<1) lag+=shift;
+    }
+  }
+  return sr/lag;
+}
+function median(arr){
+  const c=arr.slice().sort((a,b)=>a-b);
+  return c[Math.floor(c.length/2)];
+}
+
+/* ================= DOM refs ================= */
+const startBtn=document.getElementById('startBtn');
+const statusChip=document.getElementById('statusChip');
+const statusTxt=document.getElementById('statusTxt');
+const errBox=document.getElementById('errBox');
+const uploadBtn=document.getElementById('uploadBtn');
+const fileInput=document.getElementById('fileInput');
+const playFileBtn=document.getElementById('playFileBtn');
+const fileStatus=document.getElementById('fileStatus');
+
+function resetChip(){
+  statusChip.classList.remove('live','filemode');
+  statusTxt.textContent='Ready';
+}
+
+/* ================= MIC ================= */
+async function startMic(){
+  errBox.hidden=true;
+  stopFilePlayback(true);
+
+  try{
+    /* Check browser microphone support before touching the audio engine. */
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      const protocol=location.protocol;
+      if(protocol==='file:'){
+        throw new Error('file-mic-blocked');
+      }
+      throw new Error('unsupported');
+    }
+
+    /* Check the browser's microphone permission when the Permissions API is available. */
+    try{
+      if(navigator.permissions && navigator.permissions.query){
+        const permission=await navigator.permissions.query({name:'microphone'});
+        if(permission.state==='denied'){
+          throw new Error('permission-denied');
+        }
+      }
+    }catch(e){
+      if(e && e.message==='permission-denied') throw e;
+      /* Some browsers do not expose microphone permission state; continue normally. */
+    }
+
+    ensureCtx();
+
+    /* Request the microphone explicitly, with voice-processing disabled for pitch accuracy. */
+    micStream=await navigator.mediaDevices.getUserMedia({
+      audio:{
+        echoCancellation:false,
+        noiseSuppression:false,
+        autoGainControl:false,
+        channelCount:1
+      },
+      video:false
+    });
+
+    /* Make sure we actually received a usable audio track. */
+    const tracks=micStream.getAudioTracks();
+    if(!tracks.length){
+      micStream.getTracks().forEach(t=>t.stop());
+      micStream=null;
+      throw new Error('no-audio-track');
+    }
+
+    ensureAnalyser();
+    analyser.disconnect(); // never route mic to speakers (feedback)
+    micSrc=audioCtx.createMediaStreamSource(micStream);
+    micSrc.connect(analyser);
+
+    mode='mic';
+    pitchHist.length=0;
+    lastVoicedAt=performance.now();
+    startBtn.textContent='⏹ Stop Listening';
+    startBtn.classList.add('listening');
+    statusChip.classList.add('live');
+    statusTxt.textContent='Listening… बोलिए';
+  }catch(e){
+    if(micStream){
+      micStream.getTracks().forEach(t=>t.stop());
+      micStream=null;
+    }
+    micSrc=null;
+    mode=null;
+    startBtn.textContent='🎤 Start Listening';
+    startBtn.classList.remove('listening');
+    resetChip();
+
+    let msg;
+    if(e && e.message==='file-mic-blocked'){
+      msg='This browser does not allow live microphone access from a downloaded file (file://). ';
+      errBox.innerHTML='⚠ '+msg+'<b>For live mic:</b> open this HTML through <b>HTTPS or localhost</b>. On Android, the easiest option is to run it from a local web server or open it from an HTTPS web host. <b>Upload Recording</b> still works directly.';
+    }else if(e && e.message==='permission-denied'){
+      msg='Microphone permission is blocked for this browser/site. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Fix:</b> open your browser site permissions and set <b>Microphone → Allow</b>, then press Start Listening again.';
+    }else if(e && (e.name==='NotAllowedError' || e.name==='SecurityError')){
+      msg='The browser blocked microphone permission. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Check:</b> microphone permission must be allowed, and the page must be opened from <b>HTTPS or localhost</b>. If this is a downloaded HTML file, use the Upload Recording mode or serve the file locally.';
+    }else if(e && e.name==='NotFoundError'){
+      msg='No microphone was found on this device. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Check:</b> connect or enable a microphone and try again.';
+    }else if(e && e.name==='NotReadableError'){
+      msg='The microphone exists but another app/browser process may be using it. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Check:</b> close other apps using the microphone, then try again.';
+    }else if(e && e.message==='no-audio-track'){
+      msg='The browser granted access but did not provide an audio track. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Check:</b> select a working microphone and try again.';
+    }else if(e && e.name==='TypeError'){
+      msg='This browser cannot expose microphone access from the current page. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Check:</b> use HTTPS or localhost for live mic access.';
+    }else{
+      msg='Could not start the microphone. ';
+      errBox.innerHTML='⚠ '+msg+'<b>Details:</b> '+((e&&e.message)?e.message:'Unknown browser error')+'. <b>Upload Recording</b> remains available.';
+    }
+    errBox.hidden=false;
+  }
+}
+function stopMic(){
+  if(micStream){ micStream.getTracks().forEach(t=>t.stop()); micStream=null; }
+  micSrc=null;
+  if(mode==='mic') mode=null;
+  pitchHist.length=0;
+  startBtn.textContent='🎤 Start Listening';
+  startBtn.classList.remove('listening');
+  resetChip();
+}
+startBtn.addEventListener('click',()=>{ mode==='mic'?stopMic():startMic(); });
+
+
+/* ================= FILE UPLOAD MODE ================= */
+let fileBuffer=null, fileSrc=null, fileName='';
+
+uploadBtn.addEventListener('click',()=>fileInput.click());
+
+fileInput.addEventListener('change',async()=>{
+  const f=fileInput.files[0];
+  if(!f) return;
+  stopFilePlayback(true);
+  stopMic();
+  ensureCtx();
+  fileName=f.name;
+  fileStatus.className='';
+  fileStatus.textContent='⏳ Decoding "'+f.name+'"…';
+  playFileBtn.disabled=true;
+  try{
+    const ab=await f.arrayBuffer();
+    fileBuffer=await audioCtx.decodeAudioData(ab);
+    fileStatus.className='ok';
+    fileStatus.textContent='✓ '+f.name+' · '+fileBuffer.duration.toFixed(1)+'s — press ▶ Play & Check Sur';
+    playFileBtn.disabled=false;
+    errBox.hidden=true;
+  }catch(err){
+    fileBuffer=null;
+    fileStatus.className='err2';
+    fileStatus.textContent='✗ Could not decode this file. Try MP3, M4A, WAV or an OGG voice note.';
+  }
+  fileInput.value='';
+});
+
+function startFilePlayback(){
+  if(!fileBuffer) return;
+  stopMic();
+  ensureCtx();
+  ensureAnalyser();
+  if(fileSrc){ try{fileSrc.stop();}catch(e){} fileSrc=null; }
+  analyser.disconnect();
+  fileSrc=audioCtx.createBufferSource();
+  fileSrc.buffer=fileBuffer;
+  fileSrc.connect(analyser);
+  analyser.connect(masterGain); // hear the recording while analyzing
+  fileSrc.onended=()=>endFilePlayback(false);
+  fileSrc.start();
+  mode='file';
+  pitchHist.length=0;
+  playFileBtn.textContent='⏹ Stop Playback';
+  playFileBtn.classList.add('playing');
+  statusChip.classList.add('filemode');
+  statusTxt.textContent='Playing recording…';
+  fileStatus.className='ok';
+  fileStatus.textContent='▶ Analyzing "'+fileName+'" — watch the tuner!';
+}
+function endFilePlayback(silent){
+  if(fileSrc){ try{fileSrc.stop();}catch(e){} fileSrc=null; }
+  if(analyser) analyser.disconnect();
+  if(mode==='file') mode=null;
+  pitchHist.length=0;
+  playFileBtn.textContent='▶ Play & Check Sur';
+  playFileBtn.classList.remove('playing');
+  playFileBtn.disabled=!fileBuffer;
+  resetChip();
+  if(!silent && fileBuffer){
+    fileStatus.className='ok';
+    fileStatus.textContent='✓ Finished. Press ▶ to check again.';
+  }
+}
+function stopFilePlayback(silent){ if(fileSrc||mode==='file') endFilePlayback(silent); }
+playFileBtn.addEventListener('click',()=>{
+  if(mode==='file'){ endFilePlayback(true); fileStatus.className='ok'; fileStatus.textContent='⏸ Stopped. Press ▶ to play again.'; }
+  else startFilePlayback();
+});
+
+/* ================= SA SELECT ================= */
+const saSelect=document.getElementById('saSelect');
+const saMinus=document.getElementById('saMinus');
+const saPlus=document.getElementById('saPlus');
+const saFreqLabel=document.getElementById('saFreqLabel');
+saOptions.forEach((o,i)=>{
+  const op=document.createElement('option');
+  op.value=i; op.textContent='Sa = '+o.name;
+  saSelect.appendChild(op);
+});
+saSelect.value=saIndex;
+function refreshSa(){
+  saSelect.value=saIndex;
+  saFreqLabel.innerHTML='Sa = <b>'+saName()+'</b> · <b>'+saFreq().toFixed(1)+' Hz</b> — set this to match your tanpura / harmonium';
+  saMinus.disabled = saIndex<=0;
+  saPlus.disabled = saIndex>=saOptions.length-1;
+}
+saSelect.addEventListener('change',()=>{saIndex=parseInt(saSelect.value,10);refreshSa();});
+saMinus.addEventListener('click',()=>{if(saIndex>0){saIndex--;refreshSa();}});
+saPlus.addEventListener('click',()=>{if(saIndex<saOptions.length-1){saIndex++;refreshSa();}});
+refreshSa();
+
+/* ================= TANPURA DRONE ================= */
+const droneBtn=document.getElementById('droneBtn');
+let droneOn=false, droneTimer=null, droneIdx=0;
+function pluck(freq,peak){
+  const t=audioCtx.currentTime;
+  const o1=audioCtx.createOscillator(); o1.type='sawtooth'; o1.frequency.value=freq;
+  o1.detune.value=(Math.random()*2-1)*4;
+  const o2=audioCtx.createOscillator(); o2.type='triangle'; o2.frequency.value=freq;
+  const lp=audioCtx.createBiquadFilter(); lp.type='lowpass'; lp.Q.value=1.4;
+  lp.frequency.setValueAtTime(Math.min(freq*6,7500),t);
+  lp.frequency.exponentialRampToValueAtTime(Math.max(freq*1.4,220),t+1.7);
+  const g=audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(peak,t+0.025);
+  g.gain.exponentialRampToValueAtTime(0.0008,t+2.6);
+  o1.connect(lp); o2.connect(lp); lp.connect(g); g.connect(masterGain);
+  o1.start(t); o2.start(t); o1.stop(t+2.7); o2.stop(t+2.7);
+}
+function droneStep(){
+  const s=saFreq();
+  const seq=[s, s*1.5, s*2, s*2];
+  pluck(seq[droneIdx%4],0.17);
+  droneIdx++;
+}
+droneBtn.addEventListener('click',()=>{
+  ensureCtx();
+  droneOn=!droneOn;
+  if(droneOn){
+    droneBtn.classList.add('on');
+    droneBtn.textContent='🪕 Tanpura Drone : ON (सा प सा सा)';
+    droneStep();
+    droneTimer=setInterval(droneStep,900);
+  }else{
+    droneBtn.classList.remove('on');
+    droneBtn.textContent='🪕 Tanpura Drone : OFF';
+    clearInterval(droneTimer); droneTimer=null; droneIdx=0;
+  }
+});
+
+/* ================= SARGAM KEYS ================= */
+const sargamEl=document.getElementById('sargam');
+const keyEls=[];
+function playSwar(semi){
+  ensureCtx();
+  const f=saFreq()*Math.pow(2,semi/12), t=audioCtx.currentTime;
+  const o1=audioCtx.createOscillator(); o1.type='sawtooth'; o1.frequency.value=f;
+  const o2=audioCtx.createOscillator(); o2.type='sine'; o2.frequency.value=f*2;
+  const g2=audioCtx.createGain(); g2.gain.value=0.18; o2.connect(g2);
+  const lp=audioCtx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=Math.min(f*5,4200); lp.Q.value=0.8;
+  const g=audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(0.32,t+0.03);
+  g.gain.setValueAtTime(0.32,t+0.55);
+  g.gain.exponentialRampToValueAtTime(0.0008,t+1.35);
+  o1.connect(lp); g2.connect(lp); lp.connect(g); g.connect(masterGain);
+  o1.start(t); o2.start(t); o1.stop(t+1.45); o2.stop(t+1.45);
+}
+SWARAS.forEach((s,i)=>{
+  const btn=document.createElement('button');
+  btn.className='key';
+  btn.title=s.full;
+  btn.innerHTML='<span class="dev '+(s.komal?'komal ':'')+(s.tivra?'tivra':'')+'">'+s.dev+'</span><span class="code">'+s.code+'</span>';
+  btn.addEventListener('click',()=>playSwar(s.semi));
+  sargamEl.appendChild(btn);
+  keyEls.push(btn);
+});
+let activeKey=-1;
+function highlightKey(idx){
+  if(idx===activeKey) return;
+  if(activeKey>=0) keyEls[activeKey].classList.remove('active');
+  activeKey=idx;
+  if(idx>=0) keyEls[idx].classList.add('active');
+}
+
+/* ================= CANVASES ================= */
+const gaugeCv=document.getElementById('gauge');
+const waveCv=document.getElementById('wave');
+const gctx=gaugeCv.getContext('2d');
+const wctx=waveCv.getContext('2d');
+function sizeCanvas(cv){
+  const r=cv.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  if(r.width===0) return;
+  cv.width=Math.round(r.width*dpr);
+  cv.height=Math.round(r.height*dpr);
+  cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);
+}
+function sizeAll(){sizeCanvas(gaugeCv);sizeCanvas(waveCv);}
+window.addEventListener('resize',sizeAll);
+sizeAll();
+
+const angOf=c=>Math.PI+((clamp(c,-50,50)+50)/100)*Math.PI;
+
+function drawGauge(cents,voiced){
+  const W=gaugeCv.clientWidth,H=gaugeCv.clientHeight;
+  if(!W) return;
+  gctx.clearRect(0,0,W,H);
+  const cx=W/2, cy=H*0.88, r=Math.min(W*0.40,H*0.74);
+  const zones=[[-50,-25,'#ff5d6c'],[-25,-10,'#ffb84d'],[-10,10,'#3ddc84'],[10,25,'#ffb84d'],[25,50,'#ff5d6c']];
+  for(const [a,b,col] of zones){
+    gctx.beginPath();
+    gctx.strokeStyle=col; gctx.globalAlpha=0.16; gctx.lineWidth=30; gctx.lineCap='butt';
+    gctx.arc(cx,cy,r,angOf(a),angOf(b));
+    gctx.stroke();
+    gctx.beginPath();
+    gctx.globalAlpha=0.95; gctx.lineWidth=9;
+    gctx.arc(cx,cy,r,angOf(a),angOf(b));
+    gctx.stroke();
+  }
+  gctx.globalAlpha=1;
+  for(let c=-50;c<=50;c+=10){
+    const a=angOf(c), major=(c%25===0);
+    const r1=r-(major?24:18), r2=r-12;
+    gctx.beginPath();
+    gctx.strokeStyle='rgba(233,185,73,'+(major?0.85:0.4)+')';
+    gctx.lineWidth=major?2.4:1.4;
+    gctx.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);
+    gctx.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);
+    gctx.stroke();
+  }
+  gctx.fillStyle='rgba(246,234,210,.75)';
+  gctx.font='600 10px Poppins, sans-serif';
+  gctx.textAlign='center'; gctx.textBaseline='middle';
+  [-50,-25,0,25,50].forEach(c=>{
+    const a=angOf(c), rl=r+15;
+    gctx.fillText((c>0?'+':'')+c, cx+Math.cos(a)*rl, cy+Math.sin(a)*rl);
+  });
+  const ta=angOf(0);
+  gctx.beginPath();
+  gctx.fillStyle='#f6d47e';
+  const mr=r+3;
+  gctx.moveTo(cx+Math.cos(ta)*(mr-6),cy+Math.sin(ta)*(mr-6));
+  gctx.lineTo(cx+Math.cos(ta-0.05)*(mr+7),cy+Math.sin(ta-0.05)*(mr+7));
+  gctx.lineTo(cx+Math.cos(ta+0.05)*(mr+7),cy+Math.sin(ta+0.05)*(mr+7));
+  gctx.closePath(); gctx.fill();
+  gctx.font='500 10px Poppins, sans-serif';
+  gctx.fillStyle='rgba(184,166,140,.8)';
+  gctx.textAlign='left';  gctx.fillText('⟵ Flat · कोमल', 6, cy-6);
+  gctx.textAlign='right'; gctx.fillText('Sharp · तीव्र ⟶', W-6, cy-6);
+  const nc=clamp(cents,-50,50);
+  const na=angOf(nc);
+  const ncol=Math.abs(nc)<=10?'#3ddc84':(Math.abs(nc)<=25?'#ffb84d':'#ff5d6c');
+  gctx.save();
+  gctx.globalAlpha=voiced?1:0.3;
+  gctx.strokeStyle=ncol; gctx.lineWidth=3.4; gctx.lineCap='round';
+  gctx.shadowColor=ncol; gctx.shadowBlur=voiced?12:0;
+  gctx.beginPath();
+  gctx.moveTo(cx+Math.cos(na)*16,cy+Math.sin(na)*16);
+  gctx.lineTo(cx+Math.cos(na)*(r-28),cy+Math.sin(na)*(r-28));
+  gctx.stroke();
+  gctx.restore();
+  gctx.beginPath(); gctx.fillStyle='#f6d47e'; gctx.arc(cx,cy,7,0,Math.PI*2); gctx.fill();
+  gctx.beginPath(); gctx.fillStyle='#241236'; gctx.arc(cx,cy,3,0,Math.PI*2); gctx.fill();
+  gctx.font='700 14px Poppins, sans-serif';
+  gctx.textAlign='center';
+  gctx.fillStyle=voiced?ncol:'rgba(184,166,140,.6)';
+  gctx.fillText(voiced?((cents>0?'+':'')+cents.toFixed(0)+'¢'):'— ¢', cx, cy-42);
+}
+function drawWave(){
+  const W=waveCv.clientWidth,H=waveCv.clientHeight;
+  if(!W) return;
+  wctx.clearRect(0,0,W,H);
+  wctx.strokeStyle='rgba(233,185,73,.18)';
+  wctx.lineWidth=1;
+  wctx.beginPath(); wctx.moveTo(0,H/2); wctx.lineTo(W,H/2); wctx.stroke();
+  if(!mode){
+    wctx.fillStyle='rgba(184,166,140,.5)';
+    wctx.font='500 11px Poppins, sans-serif';
+    wctx.textAlign='center'; wctx.textBaseline='middle';
+    wctx.fillText('〜 live waveform appears here 〜', W/2, H/2);
+    return;
+  }
+  wctx.strokeStyle='rgba(246,212,126,.85)';
+  wctx.lineWidth=1.6;
+  wctx.beginPath();
+  const step=Math.max(1,Math.floor(buf.length/W));
+  for(let x=0;x<W;x++){
+    const v=buf[x*step]||0;
+    const y=H/2+v*H*0.46;
+    x===0?wctx.moveTo(x,y):wctx.lineTo(x,y);
+  }
+  wctx.stroke();
+}
+
+/* ================= DOM REFS ================= */
+const swaraDevEl=document.getElementById('swaraDev');
+const swaraNameEl=document.getElementById('swaraName');
+const swaraCodeLine=document.getElementById('swaraCodeLine');
+const swaraCodeTag=document.getElementById('swaraCodeTag');
+const freqVal=document.getElementById('freqVal');
+const centsVal=document.getElementById('centsVal');
+const saptakVal=document.getElementById('saptakVal');
+const verdictEl=document.getElementById('verdict');
+const accVal=document.getElementById('accVal');
+const streakVal=document.getElementById('streakVal');
+
+function setVerdict(voiced,cents){
+  verdictEl.classList.remove('good','ok','bad','idle');
+  if(!voiced){
+    if(mode==='mic') verdictEl.textContent='🎤 Listening… sing a steady note (आकार लगाइए)';
+    else if(mode==='file') verdictEl.textContent='▶ Recording is playing… waiting for voice';
+    else verdictEl.textContent='🎤 Start the mic — or upload a recording — then sing (गुनगुनाइए)';
+    verdictEl.classList.add('idle');
+    return;
+  }
+  const a=Math.abs(cents);
+  if(a<=10){ verdictEl.textContent='✓ Perfect Sur! वाह, सुर में गा रहे हैं!'; verdictEl.classList.add('good'); }
+  else if(a<=25){
+    verdictEl.textContent=cents>0?'〜 Almost — thoda neeche lao (slightly sharp ↓)':'〜 Almost — thoda upar jao (slightly flat ↑)';
+    verdictEl.classList.add('ok');
+  }else{
+    verdictEl.textContent=cents>0?'✗ Besur — too sharp, go lower (नीचे)':'✗ Besur — too flat, go higher (ऊपर)';
+    verdictEl.classList.add('bad');
+  }
+}
+
+/* ================= MAIN LOOP ================= */
+let dispCents=0, streakMs=0, lastFrameT=performance.now();
+const tuneWindow=[];
+
+function frame(now){
+  requestAnimationFrame(frame);
+  const dt=Math.min(100,now-lastFrameT); lastFrameT=now;
+
+  if(!mode){
+    dispCents+= (0-dispCents)*0.08;
+    drawGauge(dispCents,false);
+    drawWave();
+    if(activeKey>=0) highlightKey(-1);
+    setVerdict(false,0);
+    streakMs=0;
+    streakVal.textContent='0.0s';
+    return;
+  }
+
+  analyser.getFloatTimeDomainData(buf);
+  drawWave();
+
+  let voiced=false, freq=0;
+  const raw=detectPitch(buf,audioCtx.sampleRate);
+  if(raw>0 && raw>60 && raw<1500){
+    let f=raw;
+    if(pitchHist.length){
+      const m=median(pitchHist), ratio=f/m;
+      if(ratio>1.7 && ratio<2.6) f/=2;       // octave-error guard
+      else if(ratio>0.38 && ratio<0.58) f*=2;
+    }
+    pitchHist.push(f);
+    if(pitchHist.length>6) pitchHist.shift();
+    lastVoicedAt=now; voiced=true; freq=median(pitchHist);
+  }else if(now-lastVoicedAt>450){
+    pitchHist.length=0;
+  }
+
+  let cents=0, idx=-1, oct=0;
+  if(voiced){
+    const semis=12*Math.log2(freq/saFreq());
+    const nearest=Math.round(semis);
+    cents=(semis-nearest)*100;
+    idx=((nearest%12)+12)%12;
+    oct=Math.floor(nearest/12);
+  }
+
+  dispCents += ((voiced?clamp(cents,-50,50):0)-dispCents)*(voiced?0.22:0.06);
+  drawGauge(dispCents,voiced);
+
+  if(voiced){
+    const s=SWARAS[idx];
+    swaraDevEl.innerHTML='<span class="glyph">'+s.dev+'</span>';
+    swaraDevEl.classList.toggle('komal',s.komal);
+    swaraDevEl.classList.toggle('tivra',s.tivra);
+    swaraDevEl.classList.toggle('intune',Math.abs(cents)<=10);
+    swaraNameEl.textContent=s.full;
+    const saptak=oct>=1?'Taar Saptak (upper) · ':oct<=-1?'Mandra Saptak (lower) · ':'Madhya Saptak (middle) · ';
+    swaraCodeLine.textContent=saptak+'nearest swar to your Sa';
+    swaraCodeTag.textContent=s.code + (oct>0? ' · '+"'".repeat(oct):oct<0? ' · '+"'".repeat(-oct)+' (low)':'');
+    freqVal.textContent=freq.toFixed(1)+' Hz';
+    centsVal.textContent=(cents>0?'+':'')+cents.toFixed(0)+'¢';
+    centsVal.className=Math.abs(cents)<=10?'zero':(Math.abs(cents)<=25?(cents>0?'pos':'neg'):'pos');
+    saptakVal.textContent=oct>=1?'Taar ↑':oct<=-1?'Mandra ↓':'Madhya';
+    highlightKey(idx);
+    setVerdict(true,cents);
+    tuneWindow.push({t:now,ok:Math.abs(cents)<=10});
+    if(Math.abs(cents)<=10) streakMs+=dt; else streakMs=0;
+  }else{
+    swaraDevEl.innerHTML='<span class="glyph">—</span>';
+    swaraDevEl.className='bigSwara';
+    swaraNameEl.textContent='Waiting for voice…';
+    swaraCodeLine.textContent='Sing steadily near the mic';
+    swaraCodeTag.textContent='—';
+    freqVal.textContent='— Hz';
+    centsVal.textContent='—'; centsVal.className='';
+    saptakVal.textContent='—';
+    highlightKey(-1);
+    setVerdict(false,0);
+    streakMs=0;
+  }
+
+  while(tuneWindow.length && now-tuneWindow[0].t>8000) tuneWindow.shift();
+  if(tuneWindow.length>=12){
+    let okc=0; for(const x of tuneWindow) if(x.ok) okc++;
+    accVal.textContent=Math.round(okc/tuneWindow.length*100)+'%';
+  }else accVal.textContent='—';
+  streakVal.textContent=(streakMs/1000).toFixed(1)+'s';
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
