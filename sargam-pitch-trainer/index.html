@@ -51,6 +51,7 @@ button,input,select,textarea{font:inherit}button{border:1px solid var(--line);ba
 <section class="panel">
 <div class="status"><div><h2 style="margin:0">LIVE VOICE TUNER</h2><div class="hint">Works even when no Sargam or song is loaded.</div></div><span class="badge warn" id="micStatus">MICROPHONE OFF</span></div>
 <div class="row" style="margin-top:12px"><button class="primary" id="micOn">🎙 Enable microphone</button><button id="micOff" disabled>Stop microphone</button><button id="recordOn" disabled>● Record voice</button><button id="recordOff" disabled>Stop & download</button></div>
+<div class="twocol" style="margin-top:10px"><div><label for="micDevice">MICROPHONE INPUT</label><select id="micDevice"><option value="">System default input</option></select></div><div style="align-self:end"><button id="refreshMics" style="width:100%">↻ Refresh devices</button></div></div>
 <div class="micgrid twocol" style="margin-top:12px">
 <div class="readout"><div class="k">Your detected note</div><div class="big" id="liveNote">—</div><div class="sub" id="liveSargam">Waiting for voice</div></div>
 <div class="readout"><div class="k">Measured frequency</div><div class="big" id="liveHz">— Hz</div><div class="sub" id="liveCents">Nearest-note deviation: —</div></div>
@@ -197,7 +198,8 @@ function med(a){var x=a.slice().sort(function(a,b){return a-b;});return x[Math.f
 async function enableMic(){
  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$("micDiagnostic").textContent="Microphone unavailable. Open the site over HTTPS and allow microphone permission.";return;}
  try{
-  micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1}});
+  var audioConstraints={echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1};var selectedDevice=$("micDevice").value;if(selectedDevice)audioConstraints.deviceId={exact:selectedDevice};micStream=await navigator.mediaDevices.getUserMedia({audio:audioConstraints});
+  await refreshMics();
   var C=window.AudioContext||window.webkitAudioContext;audioContext=audioContext||new C();await audioContext.resume();
   var source=audioContext.createMediaStreamSource(micStream);analyser=audioContext.createAnalyser();analyser.fftSize=8192;analyser.smoothingTimeConstant=0;source.connect(analyser);
   $("micStatus").textContent="MICROPHONE ON";$("micStatus").className="badge ok";$("micOn").disabled=true;$("micOff").disabled=false;$("recordOn").disabled=false;
@@ -216,7 +218,7 @@ async function enableMic(){
      if(target()){var error=(m-target().midi)*100;samples.push({time:lastPitch.time,midi:m,target:target().midi,error:error,index:seqIndex});if(samples.length>12000)samples.shift();if(Math.abs(error)<=50)matched.add(seqIndex);}
      updateLive(lastPitch);updateStats();
     }else{
-     lastPitch=null;updateLive(null);
+     lastPitch=null;pitchBuffer=[];updateLive(null);
      if(level<2){$("micDiagnostic").className="notice";$("micDiagnostic").textContent="Mic is on, but input level is very low. Check the microphone selected by your operating system and its input volume.";}
      else{$("micDiagnostic").className="info";$("micDiagnostic").textContent="Audio is reaching the mic but no stable pitch was found. Hold a steady aa vowel and reduce background music.";}
     }
@@ -228,6 +230,9 @@ async function enableMic(){
 }
 function stopMic(){if(raf)cancelAnimationFrame(raf);raf=null;analyser=null;if(micStream){micStream.getTracks().forEach(function(t){t.stop();});micStream=null;}$("micStatus").textContent="MICROPHONE OFF";$("micStatus").className="badge warn";$("micOn").disabled=false;$("micOff").disabled=true;$("recordOn").disabled=true;if(rec&&rec.state==="recording")stopRecording();}
 $("micOn").addEventListener("click",enableMic);$("micOff").addEventListener("click",stopMic);
+async function refreshMics(){try{var devices=await navigator.mediaDevices.enumerateDevices(),inputs=devices.filter(function(d){return d.kind==="audioinput";}),select=$("micDevice"),current=select.value;select.innerHTML='<option value="">System default input</option>';inputs.forEach(function(d,i){var o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||("Microphone "+(i+1));select.appendChild(o);});if(current&&inputs.some(function(d){return d.deviceId===current;}))select.value=current;}catch(e){$("micDiagnostic").textContent="Could not list microphone devices: "+e.message;}}
+$("refreshMics").addEventListener("click",refreshMics);
+if(navigator.mediaDevices&&navigator.mediaDevices.addEventListener)navigator.mediaDevices.addEventListener("devicechange",refreshMics);
 function updateStats(){var n=samples.length,good=samples.filter(function(s){return Math.abs(s.error)<=50;}).length,avg=n?samples.reduce(function(a,s){return a+Math.abs(s.error);},0)/n:0;$("matchRate").textContent=n?Math.round(good/n*100)+"%":"—";$("avgError").textContent=n?avg.toFixed(0)+"¢":"—";$("sampleCount").textContent=String(history.length);$("notesMatched").textContent=matched.size+" / "+sequence.length;}
 function drawChart(){
  var box=canvas.getBoundingClientRect();if(!box.width||!box.height)return;var dpr=window.devicePixelRatio||1,w=box.width,h=box.height;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle="#0a121d";ctx.fillRect(0,0,w,h);
