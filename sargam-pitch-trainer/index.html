@@ -2,216 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10131c">
-<title>Sargam Pitch Trainer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0e15">
+<title>Sargam Pitch Trainer v2</title>
 <style>
-:root{color-scheme:dark;--bg:#0b0e15;--panel:#131925;--panel2:#182131;--line:#273247;--text:#edf2fb;--muted:#9aa8bd;--accent:#8c7bff;--cyan:#57d7d0;--green:#73d69a;--red:#ff7f87;--yellow:#f0c674;--radius:16px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -10%,#25234b 0,transparent 35%),var(--bg);color:var(--text);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#202a3b;color:var(--text);border-radius:10px;padding:9px 13px;font-weight:650}button:hover{border-color:#6976a0;background:#29364c}button.primary{background:linear-gradient(135deg,#7767f2,#554bd0);border-color:#8275ff;color:#fff}button.ghost{background:transparent}button.danger{color:#ffadb2}button:disabled{opacity:.45;cursor:not-allowed}input,select{background:#0d1420;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px;min-width:0}input[type=file]{max-width:100%;font-size:12px}input[type=range]{padding:0;accent-color:var(--accent)}.wrap{max-width:1450px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:13px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#8778ff,#3cbdc2);font-size:22px;font-weight:900}.brand h1{font-size:21px;margin:0;letter-spacing:-.5px}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}.topnote{color:var(--muted);font-size:12px;text-align:right}.layout{display:grid;grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:18px;align-items:start}.stack{display:grid;gap:16px}.panel{background:linear-gradient(180deg,rgba(24,33,49,.97),rgba(17,24,36,.98));border:1px solid var(--line);border-radius:var(--radius);padding:17px;box-shadow:0 12px 32px #0002}.panel h2{font-size:14px;margin:0 0 13px;letter-spacing:.2px}.panel h3{font-size:12px;color:#c9d4e5;margin:15px 0 8px}.muted{color:var(--muted)}.small{font-size:11px;line-height:1.5;color:var(--muted)}.field{display:grid;gap:6px;margin:10px 0}.field label,.label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.35px}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.row>*{flex:0 0 auto}.row .grow{flex:1 1 150px}.audio-box{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0d1420}.audio-box audio{width:100%;height:38px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.statgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.stat{background:#111927;border:1px solid var(--line);border-radius:13px;padding:12px;min-width:0}.stat .k{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}.stat .v{font-size:22px;font-weight:800;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stat .sub{font-size:10px;color:var(--muted);margin-top:3px}.statusline{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{font-size:10px;font-weight:800;border-radius:99px;padding:5px 9px;background:#253047;color:#c4d1e7;letter-spacing:.4px}.pill.good{background:#163b31;color:#8ce4b2}.pill.bad{background:#48262e;color:#ffb4b8}.pill.warn{background:#46391e;color:#f1d08a}.livegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.livebox{background:#0d1420;border:1px solid var(--line);border-radius:14px;padding:15px}.livebox .tag{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.big-note{font-size:36px;font-weight:850;letter-spacing:-1px;margin:6px 0 0}.freq{font-size:12px;color:var(--muted)}.meter{height:9px;background:#273247;border-radius:9px;position:relative;margin:15px 0 7px;overflow:hidden}.meter .mid{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#dfe8f9aa}.meter .needle{position:absolute;left:50%;top:0;bottom:0;width:4px;background:var(--cyan);transform:translateX(-50%);border-radius:4px;transition:left .08s}.meterlabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}.chartpanel{padding:15px}.charthead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.charthead h2{margin:0}.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:10px;color:var(--muted)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.chartwrap{height:380px;margin-top:12px;position:relative;background:#0c131e;border:1px solid var(--line);border-radius:12px;overflow:hidden}.chartwrap canvas{width:100%;height:100%;display:block}.chartfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:9px}.note-table{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:10px}.note-table table{width:100%;border-collapse:collapse;font-size:11px}.note-table th{position:sticky;top:0;background:#1a2434;color:var(--muted);text-align:left;padding:8px}.note-table td{padding:6px;border-top:1px solid #263144}.note-table input{width:100%;padding:6px;font-size:11px}.note-table button{padding:5px 8px;font-size:10px}.warnbox{padding:10px 12px;border:1px solid #69572e;background:#2b2518;color:#e8d4a0;border-radius:10px;font-size:11px;line-height:1.5;margin-top:10px}.infobox{padding:10px 12px;border:1px solid #344761;background:#111d2c;color:#b7c8dc;border-radius:10px;font-size:11px;line-height:1.5;margin-top:10px}.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}.tab{padding:8px 12px;font-size:11px}.tab.active{background:#39366c;border-color:#6e64d9}.tabpane{display:none}.tabpane.active{display:block}.hidden{display:none!important}.progress{height:5px;background:#293449;border-radius:8px;overflow:hidden;margin-top:10px}.progress>i{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));display:block}.footer{color:#74839a;font-size:10px;text-align:center;padding:22px 8px}.check{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}.check input{accent-color:var(--accent)}.keyval{display:flex;justify-content:space-between;gap:10px;font-size:11px;padding:6px 0;border-bottom:1px solid #273247}.keyval:last-child{border:0}.kbd{font-family:ui-monospace,monospace;background:#263247;padding:2px 5px;border-radius:5px;color:#d5e0f1}
-@media(max-width:980px){.layout{grid-template-columns:1fr}.leftcol{display:grid;grid-template-columns:1fr 1fr;gap:14px}.leftcol .panel{margin:0}.chartwrap{height:330px}}
-@media(max-width:620px){.wrap{padding:13px}.top{align-items:flex-start}.topnote{display:none}.leftcol{display:grid;grid-template-columns:1fr}.statgrid{grid-template-columns:repeat(2,1fr)}.livegrid{grid-template-columns:1fr 1fr}.big-note{font-size:29px}.chartwrap{height:290px}.panel{padding:13px}}
+:root{color-scheme:dark;--bg:#0b0e15;--panel:#141c2a;--line:#29364b;--text:#edf2fb;--muted:#99a9bf;--purple:#9a8cff;--cyan:#55d8cf;--green:#75dda2;--red:#ff858d;--amber:#f3c878;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% -8%,#29234b 0,transparent 34%),radial-gradient(ellipse at 90% 0%,#10353b 0,transparent 25%),var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{border:1px solid var(--line);background:#202b3d;color:var(--text);border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}button:hover{background:#2b3950;border-color:#68799a}button.primary{background:linear-gradient(135deg,#8174f7,#584ecb);border-color:#8b80ff;color:white}button.good{background:#173c32;border-color:#28634e}button:disabled{opacity:.42;cursor:not-allowed}input,select,textarea{width:100%;min-width:0;background:#0c1420;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:10px}textarea{min-height:112px;resize:vertical;line-height:1.6}input[type=file]{font-size:12px;padding:8px}label{display:block;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.45px;margin-bottom:6px}.wrap{max-width:1440px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:13px}.logo{height:46px;width:46px;border-radius:15px;background:linear-gradient(140deg,#8f80ff,#38b9b5);display:grid;place-items:center;font-size:23px;font-weight:900;color:#fff}.brand h1{margin:0;font-size:22px;letter-spacing:-.5px}.brand p{margin:3px 0 0;font-size:12px;color:var(--muted)}.topright{text-align:right;color:var(--muted);font-size:11px;line-height:1.6}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:5px 9px;font-size:10px;font-weight:850;letter-spacing:.4px;background:#253247;color:#c9d6e9}.badge.ok{background:#153a31;color:#91e7b6}.badge.warn{background:#45371e;color:#f3d18f}.grid{display:grid;grid-template-columns:minmax(315px,390px) minmax(0,1fr);gap:16px;align-items:start}.stack{display:grid;gap:15px}.panel{background:linear-gradient(180deg,rgba(23,32,48,.98),rgba(16,23,34,.98));border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 12px 34px #0002}.panel h2{font-size:14px;margin:0 0 12px}.hint{color:var(--muted);font-size:11px;line-height:1.55}.field{margin:10px 0}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.row>*{flex:0 0 auto}.row .grow{flex:1 1 150px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:9px}.readout{background:#0b1420;border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0}.readout .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}.readout .big{font-size:34px;font-weight:900;letter-spacing:-1px;margin:5px 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.readout .sub{font-size:12px;color:var(--muted);margin-top:4px}.meter{height:9px;background:#2b394e;border-radius:9px;overflow:hidden}.meter>i{height:100%;width:0;display:block;background:linear-gradient(90deg,#55d8cf,#9a8cff);transition:width .08s}.meterrow{display:grid;grid-template-columns:100px 1fr 42px;gap:10px;align-items:center;font-size:10px;color:var(--muted);margin-top:10px}.targetbox{background:linear-gradient(135deg,#251f49,#152b3b);border:1px solid #4a477e;border-radius:15px;padding:15px}.targetlabel{font-size:10px;color:#c4bcff;letter-spacing:.8px;font-weight:850}.targetnote{font-size:38px;font-weight:950;letter-spacing:-1px;margin:3px 0}.targetmeta{font-size:12px;color:#d6d9ec}.swara-list{display:grid;gap:6px;max-height:310px;overflow:auto;margin-top:10px}.swara{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:9px;text-align:left;padding:8px 10px;background:#0d1623}.swara.active{border-color:#9589ff;background:#28244b;box-shadow:inset 3px 0 #a398ff}.swara .num{font-size:10px;color:var(--muted)}.swara .symbol{font-size:16px;font-weight:850}.swara .noteinfo{font-size:11px;color:var(--muted);text-align:right}.chartwrap{height:360px;border:1px solid var(--line);border-radius:12px;background:#0a121d;overflow:hidden;margin-top:12px}.chartwrap canvas{width:100%;height:100%;display:block}.legend{display:flex;gap:13px;flex-wrap:wrap;color:var(--muted);font-size:10px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}.stat{background:#0d1623;border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}.stat .k{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.6px}.stat .v{font-size:21px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stat .s{font-size:10px;color:var(--muted);margin-top:2px}.notice{border:1px solid #66562e;background:#2b2519;color:#e9d9aa;border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.55;margin-top:10px}.info{border:1px solid #344861;background:#101d2b;color:#bfd0e3;border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.55;margin-top:10px}.success{border:1px solid #28634e;background:#153329;color:#a4edc0;border-radius:10px;padding:10px 12px;font-size:11px}.filelabel{display:block;background:#0c1420;border:1px dashed #52647d;border-radius:10px;padding:10px;font-size:11px;color:#c8d5e8}.filelabel input{margin-top:7px}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{font-size:11px;padding:8px 11px}.tab.active{background:#373268;border-color:#8175ee}.tabcontent.hidden{display:none}.token{border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:#101927;font-size:12px}.token.current{background:#332c64;border-color:#9789ff;color:#fff}.preview{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.foot{text-align:center;color:#74849b;font-size:10px;padding:19px}.audio{width:100%;margin-top:8px;height:34px}.range-row{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:var(--muted)}@media(max-width:980px){.grid{grid-template-columns:1fr}.left{display:grid;grid-template-columns:1fr 1fr;gap:15px}}@media(max-width:620px){.wrap{padding:12px}.top{align-items:flex-start}.topright{display:none}.left{grid-template-columns:1fr}.panel{padding:13px}.stats{grid-template-columns:repeat(2,1fr)}.chartwrap{height:300px}.readout .big{font-size:29px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
-    <div class="brand"><div class="logo">सा</div><div><h1>Sargam Pitch Trainer</h1><p>Sing against a timed melody reference · local-first · no account</p></div></div>
-    <div class="topnote">STATIC WEB APP · GITHUB PAGES READY<br>Microphone works on HTTPS or localhost</div>
-  </header>
-
-  <div class="layout">
-    <aside class="stack leftcol">
-      <section class="panel">
-        <h2>01 · Song audio</h2>
-        <div class="field"><label for="audioFile">UPLOAD BACKING TRACK</label><input id="audioFile" type="file" accept="audio/*"></div>
-        <div class="audio-box"><div id="audioName" class="small" style="margin-bottom:7px">No audio loaded. Choose an audio file from your device.</div><audio id="audio" controls preload="metadata"></audio></div>
-        <div class="two" style="margin-top:10px">
-          <div class="field"><label for="speed">PLAYBACK SPEED</label><select id="speed"><option value="0.75">0.75×</option><option value="0.85">0.85×</option><option value="0.9">0.90×</option><option value="1" selected>1.00×</option><option value="1.1">1.10×</option><option value="1.25">1.25×</option></select></div>
-          <div class="field"><label for="countIn">COUNT-IN</label><select id="countIn"><option value="0">Off</option><option value="2">2 beats</option><option value="4">4 beats</option></select></div>
-        </div>
-        <div class="row"><button class="primary" id="playBtn">▶ Play</button><button id="pauseBtn">Ⅱ Pause</button><button class="ghost" id="restartBtn">↺ Restart</button></div>
-        <div class="two" style="margin-top:9px">
-          <div class="field"><label>LOOP START (SEC)</label><input id="loopStart" type="number" min="0" step="0.1" value="0"></div>
-          <div class="field"><label>LOOP END (SEC)</label><input id="loopEnd" type="number" min="0" step="0.1" placeholder="song end"></div>
-        </div>
-        <div class="row"><button id="markStart">Mark start here</button><button id="markEnd">Mark end here</button><label class="check"><input id="loopEnabled" type="checkbox"> Loop section</label></div>
-        <div class="progress"><i id="songProgress"></i></div>
-        <div class="small" id="songTime" style="margin-top:5px">00:00 / 00:00</div>
-      </section>
-
-      <section class="panel">
-        <h2>02 · Melody reference</h2>
-        <div class="field"><label for="refFile">LOAD REFERENCE (JSON / CSV / MIDI)</label><input id="refFile" type="file" accept=".json,.csv,.mid,.midi,application/json,text/csv,audio/midi"></div>
-        <div class="row"><button id="downloadTemplate">Download JSON template</button><button id="saveReference">Save in this browser</button></div>
-        <div class="field"><label for="demoBtn">QUICK TEST</label><button id="demoBtn">Load a short original demo melody</button></div>
-        <div class="two">
-          <div class="field"><label for="displayMode">NOTE LABELS</label><select id="displayMode"><option value="western">Western (C4)</option><option value="sargam">Sargam (Sa, Re...)</option></select></div>
-          <div class="field"><label for="tonic">SA / TONIC</label><select id="tonic"></select></div>
-        </div>
-        <div class="two">
-          <div class="field"><label for="transpose">TRANSPOSE</label><select id="transpose"></select></div>
-          <div class="field"><label for="tolerance">MATCH WINDOW</label><select id="tolerance"><option value="25">±25 cents</option><option value="40">±40 cents</option><option value="50" selected>±50 cents</option><option value="75">±75 cents</option><option value="100">±100 cents</option></select></div>
-        </div>
-        <div class="field"><label for="offset">REFERENCE ALIGNMENT OFFSET <span id="offsetValue">0.00 s</span></label><input id="offset" type="range" min="-3" max="3" step="0.05" value="0"></div>
-        <div class="small">Offset adjusts which reference time is compared with the song playback time. Use it to compensate for a reference that starts slightly early or late.</div>
-        <div class="infobox" id="referenceInfo">No reference loaded. Add timed notes in the editor or import a JSON, CSV or MIDI file.</div>
-      </section>
-
-      <section class="panel">
-        <h2>03 · Melody editor</h2>
-        <div class="small">Create or correct the melody reference. Times are seconds from the start of the reference. Notes use formats such as A2, C#4, Eb4.</div>
-        <div class="two">
-          <div class="field"><label for="newStart">START (SEC)</label><input id="newStart" type="number" min="0" step="0.05" value="0"></div>
-          <div class="field"><label for="newEnd">END (SEC)</label><input id="newEnd" type="number" min="0" step="0.05" value="0.5"></div>
-        </div>
-        <div class="row"><div class="field grow"><label for="newNote">NOTE</label><input id="newNote" value="C4" placeholder="e.g. A3"></div><button class="primary" id="addNote">+ Add note</button></div>
-        <div class="row"><button id="addAtPlayhead">Add note at playhead</button><button id="clearReference" class="danger">Clear notes</button></div>
-        <div class="note-table"><table><thead><tr><th>#</th><th>Start</th><th>End</th><th>Note</th><th></th></tr></thead><tbody id="noteRows"><tr><td colspan="5" class="muted">No notes yet.</td></tr></tbody></table></div>
-      </section>
-    </aside>
-
-    <main class="stack">
-      <section class="panel">
-        <div class="statusline"><h2 style="margin:0">LIVE SINGING MONITOR</h2><span class="pill warn" id="micStatus">MIC OFF</span></div>
-        <div class="row" style="margin-top:12px"><button class="primary" id="micOn">🎙 Enable microphone</button><button id="micOff" disabled>Stop microphone</button><button id="recordBtn" disabled>● Record my voice</button><button id="stopRecordBtn" disabled>Stop & save</button></div>
-        <div class="livegrid" style="margin-top:13px">
-          <div class="livebox"><div class="tag">Your detected pitch</div><div class="big-note" id="youNote">—</div><div class="freq" id="youFreq">Waiting for microphone</div></div>
-          <div class="livebox"><div class="tag">Target at this moment</div><div class="big-note" id="targetNote">—</div><div class="freq" id="targetDetail">Load a timed melody reference</div></div>
-        </div>
-        <div class="livebox" style="margin-top:11px"><div class="statusline"><div><div class="tag">Pitch deviation</div><div id="centsText" style="font-size:20px;font-weight:800;margin-top:4px">— cents</div></div><span class="pill" id="pitchStatus">WAITING</span></div><div class="meter"><div class="mid"></div><div class="needle" id="needle"></div></div><div class="meterlabels"><span>Flat −50¢</span><span>In tune</span><span>Sharp +50¢</span></div></div>
-        <div class="warnbox">You can sing with speakers or headphones; headphones are optional. In speaker mode, the microphone may also hear the original singer and instruments, which can confuse pitch tracking. Keep the microphone closer to your mouth than the speakers and lower speaker volume if needed. The browser is asked to apply echo cancellation to reduce speaker bleed, but this depends on your device and browser. Octave and harmonic errors can still occur.</div>
-      </section>
-
-      <section class="panel chartpanel">
-        <div class="charthead"><div><h2>MELODY vs YOUR VOICE</h2><div class="small">Horizontal axis: song time · Vertical axis: musical pitch</div></div><div class="legend"><span><i class="dot" style="background:#8d7cff"></i>Target melody</span><span><i class="dot" style="background:#55d8cf"></i>Your detected pitch</span><span><i class="dot" style="background:#f0c674"></i>Playhead</span></div></div>
-        <div class="chartwrap"><canvas id="pitchChart" aria-label="Pitch comparison chart"></canvas></div>
-        <div class="chartfoot"><span class="small" id="chartSummary">Load a song and a timed melody reference to see the comparison.</span><span class="small">Tip: click play, enable mic, then sing.</span></div>
-      </section>
-
-      <section class="panel">
-        <h2>PERFORMANCE SUMMARY</h2>
-        <div class="statgrid">
-          <div class="stat"><div class="k">Matched samples</div><div class="v" id="matchRate">—</div><div class="sub">Within selected cents window</div></div>
-          <div class="stat"><div class="k">Mean pitch error</div><div class="v" id="meanError">—</div><div class="sub">Absolute cents, aligned samples</div></div>
-          <div class="stat"><div class="k">Compared samples</div><div class="v" id="sampleCount">0</div><div class="sub">Voice + target both detected</div></div>
-          <div class="stat"><div class="k">Notes covered</div><div class="v" id="notesCovered">0 / 0</div><div class="sub">Reference notes attempted</div></div>
-        </div>
-        <div class="row"><button id="clearSession">Clear current session</button><button id="downloadResults">Export session CSV</button></div>
-        <div class="small" id="summaryNote" style="margin-top:9px">Scores are based only on samples where both your pitch and a target note were detected. They measure pitch closeness, not vocal quality, pronunciation or musical expression.</div>
-      </section>
-
-      <section class="panel">
-        <div class="tabs"><button class="tab active" data-tab="how">How it works</button><button class="tab" data-tab="data">Reference format</button><button class="tab" data-tab="privacy">Privacy & limits</button></div>
-        <div class="tabpane active" id="tab-how"><div class="small">The reference melody provides note events with start and end times. The audio player's current time selects the target note. The microphone signal is analysed with a YIN-style fundamental-frequency estimator. The detected frequency is converted to MIDI pitch and compared with the target in cents. Use the alignment offset to correct small timing differences. The chart draws the reference note blocks and your measured pitch trace on the same time/pitch axes.</div></div>
-        <div class="tabpane" id="tab-data"><div class="small">JSON structure: <span class="kbd">{ "title": "My song", "notes": [{"start": 0, "end": 0.5, "note": "A3"}] }</span>. Every note needs start and end times in seconds and a pitch such as C4, F#3 or Bb3. CSV columns: <span class="kbd">start,end,note</span>. MIDI imports expose separate tracks where possible; choose the vocal melody track by importing a track-specific MIDI or editing the resulting notes.</div></div>
-        <div class="tabpane" id="tab-privacy"><div class="small">This page processes microphone audio in your browser. It does not send microphone recordings or song files to a server. Recording is optional and downloads a local WebM/Opus file where supported. Microphone access requires HTTPS or localhost. Use headphones to reduce backing-track bleed. Pitch detection from a mixed recording is imperfect, particularly with vibrato, breathy notes, loud instruments and octave-rich sounds. A correct reference melody and correct timing are required for meaningful scores.</div></div>
-      </section>
-    </main>
-  </div>
-  <div class="footer">Sargam Pitch Trainer · Static browser app · Your audio stays on your device</div>
+<header class="top"><div class="brand"><div class="logo">सा</div><div><h1>Sargam Pitch Trainer <span class="badge">v2</span></h1><p>Notation-led vocal practice · independent live tuner</p></div></div><div class="topright">STATIC WEB APP · GITHUB PAGES READY<br>Microphone audio stays in your browser</div></header>
+<div class="grid">
+<aside class="stack left">
+<section class="panel">
+<h2>01 · Load your Sargam</h2>
+<label class="filelabel">UPLOAD NOTATION (.TXT / .JSON / .CSV)<input id="notationFile" type="file" accept=".txt,.text,.json,.csv,text/plain,application/json,text/csv"></label>
+<div class="field"><label for="notation">OR PASTE YOUR SAR­GAM HERE</label><textarea id="notation" spellcheck="false">S R G M P D N S' | S' N D P M G R S</textarea></div>
+<div class="row"><button class="primary" id="loadNotation">Load / parse Sargam</button><button id="sampleNotation">Sample</button></div>
+<div id="parseStatus" class="info">Paste notes separated by spaces. Example: S R G M P D N S'.</div>
+<div id="notationPreview" class="preview"></div>
+<div class="hint" style="margin-top:9px">Roman convention: S=Sa, r=komal Re, R=Re, g=komal Ga, G=Ga, M=Ma, m=tivra Ma, P=Pa, d=komal Dha, D=Dha, n=komal Ni, N=Ni. Prefix a dot for lower octave (.S); suffix an apostrophe for upper octave (S'). Hindi swaras are accepted. Use (k) for komal and (t) for tivra.</div>
+</section>
+<section class="panel">
+<h2>02 · Choose your scale (Sa)</h2>
+<div class="field"><label for="saSelect">YOUR STARTING SA / TONIC</label><select id="saSelect"></select></div>
+<div class="twocol"><div class="readout"><div class="k">Chosen Sa</div><div class="big" id="saName" style="font-size:25px">C3</div><div class="sub" id="saHz">130.81 Hz</div></div><div class="readout"><div class="k">Transposition</div><div class="big" id="transposeLabel" style="font-size:25px">0</div><div class="sub">semitones from selected Sa</div></div></div>
+<div class="field"><label for="transpose">QUICK TRANSPOSE</label><select id="transpose"></select></div>
+<div class="hint">Changing Sa recalculates every swara. Pick the octave too: C3, D3, A2, C4, and so on.</div>
+</section>
+<section class="panel">
+<h2>03 · Practice sequence</h2>
+<div class="targetbox"><div class="targetlabel">SING THIS SWARA</div><div class="targetnote" id="targetSargam">Sa</div><div class="targetmeta"><strong id="targetWestern">C3</strong> · <span id="targetHz">130.81 Hz</span></div><div class="targetmeta" id="targetPosition">No notation loaded</div></div>
+<div class="row" style="margin-top:10px"><button id="prevNote">← Previous</button><button class="primary" id="nextNote">Next →</button><button id="playTarget">▶ Target tone</button></div>
+<div class="twocol" style="margin-top:8px"><div class="field"><label for="noteSeconds">AUTO NOTE LENGTH</label><select id="noteSeconds"><option value="0.7">0.7 sec</option><option value="1" selected>1 sec</option><option value="1.5">1.5 sec</option><option value="2">2 sec</option><option value="3">3 sec</option></select></div><div class="field"><label>AUTO SEQUENCE</label><button id="autoPlay" class="good">▶ Start sequence</button></div></div>
+<div class="hint">Manual mode lets you stay on a note. Auto mode advances through the written sequence at the duration you choose.</div>
+<div id="swaraList" class="swara-list"><div class="hint">Load Sargam to see the notes here.</div></div>
+</section>
+<section class="panel">
+<h2>04 · Optional song accompaniment</h2>
+<label class="filelabel">UPLOAD ORIGINAL SONG OR KARAOKE (OPTIONAL)<input id="backingFile" type="file" accept="audio/*"></label>
+<audio id="backingAudio" class="audio" controls></audio>
+<div class="hint">This only plays the backing audio. The app does not extract notes from it or use it as the Sargam reference. Speaker playback is allowed; the microphone may also hear the singer in the recording.</div>
+</section>
+</aside>
+<main class="stack">
+<section class="panel">
+<div class="status"><div><h2 style="margin:0">LIVE VOICE TUNER</h2><div class="hint">Works even when no Sargam or song is loaded.</div></div><span class="badge warn" id="micStatus">MICROPHONE OFF</span></div>
+<div class="row" style="margin-top:12px"><button class="primary" id="micOn">🎙 Enable microphone</button><button id="micOff" disabled>Stop microphone</button><button id="recordOn" disabled>● Record voice</button><button id="recordOff" disabled>Stop & download</button></div>
+<div class="micgrid twocol" style="margin-top:12px">
+<div class="readout"><div class="k">Your detected note</div><div class="big" id="liveNote">—</div><div class="sub" id="liveSargam">Waiting for voice</div></div>
+<div class="readout"><div class="k">Measured frequency</div><div class="big" id="liveHz">— Hz</div><div class="sub" id="liveCents">Nearest-note deviation: —</div></div>
 </div>
-
+<div class="meterrow"><span>Input level</span><div class="meter"><i id="inputMeter"></i></div><span id="inputLevel">0%</span></div>
+<div class="status" style="margin-top:12px"><span class="hint">Comparison with current target</span><span class="badge" id="matchStatus">NO TARGET</span></div>
+<div class="readout" style="margin-top:8px"><div class="status"><div><div class="k">Target deviation</div><div class="big" style="font-size:25px" id="deviation">— cents</div></div><div style="text-align:right"><div class="k">Target frequency</div><div style="font-size:19px;font-weight:850;margin-top:5px" id="targetLiveHz">— Hz</div></div></div><div class="meter" style="margin-top:12px;position:relative"><i id="tuneMeter" style="width:2px;margin-left:50%;background:#a99aff"></i></div><div class="range-row"><span>Flat</span><span>In tune</span><span>Sharp</span></div></div>
+<div class="notice">Headphones are optional. You can sing while the song plays through speakers. If the microphone follows the original singer, lower speaker volume and move the microphone closer to your mouth. This browser-only detector cannot perfectly separate two voices mixed together.</div>
+<div id="micDiagnostic" class="info">Enable the microphone. The tuner should show frequency and note before you load any Sargam.</div>
+</section>
+<section class="panel">
+<div class="status"><div><h2 style="margin:0">LIVE PITCH CHART</h2><div class="hint">Independent voice history with the current target shown as a reference line.</div></div><div class="legend"><span><i class="dot" style="background:#55d8cf"></i>Your voice</span><span><i class="dot" style="background:#9a8cff"></i>Current target</span></div></div>
+<div class="chartwrap"><canvas id="pitchChart" aria-label="Live voice pitch chart"></canvas></div>
+<div class="status" style="margin-top:8px"><span class="hint" id="chartHint">Sing any note to start the chart.</span><button id="clearChart">Clear chart</button></div>
+</section>
+<section class="panel">
+<h2>SESSION PERFORMANCE</h2>
+<div class="stats"><div class="stat"><div class="k">In-tune samples</div><div class="v" id="matchRate">—</div><div class="s">Within ±50 cents</div></div><div class="stat"><div class="k">Average error</div><div class="v" id="avgError">—</div><div class="s">Absolute cents</div></div><div class="stat"><div class="k">Pitch samples</div><div class="v" id="sampleCount">0</div><div class="s">Detected voice frames</div></div><div class="stat"><div class="k">Notes matched</div><div class="v" id="notesMatched">0 / 0</div><div class="s">Distinct swaras</div></div></div>
+<div class="row" style="margin-top:10px"><button id="clearStats">Reset session</button><button id="exportCsv">Export pitch CSV</button><button id="exportSargam">Export Sargam JSON</button></div>
+<div class="hint" style="margin-top:8px">The score measures pitch closeness, not tone quality, diction, emotion or overall musicianship.</div>
+</section>
+<section class="panel">
+<div class="tabs"><button class="tab active" data-tab="guide">Notation guide</button><button class="tab" data-tab="diagnostics">Troubleshooting</button><button class="tab" data-tab="privacy">Privacy</button></div>
+<div id="tab-guide" class="tabcontent hint">The reference is your notation, not the original MP3. Upload or paste Sargam, choose Sa, and practise one note at a time. The app converts each swara into an equal-tempered pitch target. Use Target tone to hear the note before singing it.</div>
+<div id="tab-diagnostics" class="tabcontent hint hidden">If the microphone is enabled but no pitch appears: check browser microphone permission, choose the correct input in your operating system, move closer to the microphone, sing a steady vowel such as “aa”, and watch the input-level meter. If the input meter is near zero, check microphone volume. Loud background music, harmonics, whispering and breathy notes can confuse pitch detection.</div>
+<div id="tab-privacy" class="tabcontent hint hidden">Microphone processing and optional voice recording happen locally in your browser. No audio is uploaded to a server. Microphone access requires HTTPS or localhost.</div>
+</section>
+</main>
+</div>
+<div class="foot">Sargam Pitch Trainer v2 · Notation-led · Browser-only audio processing · No backend required</div>
+</div>
 <script>
-(() => {
-'use strict';
-const $ = id => document.getElementById(id);
-const audio = $('audio');
-const canvas = $('pitchChart');
-const ctx = canvas.getContext('2d');
-const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const SARGAM = ['Sa','re','Re','ga','Ga','Ma','Maᵗ','Pa','dha','Dha','ni','Ni'];
-let reference = {title:'',notes:[]};
-let audioUrl = null;
-let micStream = null, audioContext = null, analyser = null, micSource = null, rafId = null;
-let recording = null, recordingChunks = [];
-let pitchHistory = [], sessionRows = [], noteAttempts = new Set();
-let lastPitch = null, lastDraw = 0, loopGuard = false;
-let midiTracks = [];
-
-function midiToName(midi){const n=Math.round(midi);return NOTE_NAMES[((n%12)+12)%12] + (Math.floor(n/12)-1);}
-function parseNote(str){const m=String(str).trim().match(/^([A-Ga-g])([#b]?)(-?\d+)$/);if(!m) throw new Error('Invalid note "'+str+'". Use e.g. A2, C#4 or Bb3.');const base={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1].toUpperCase()];const accidental=m[2]==='#'?1:m[2]==='b'?-1:0;return (Number(m[3])+1)*12+base+accidental;}
-function midiLabel(midi){if(!Number.isFinite(midi))return '—';const n=Math.round(midi);if($('displayMode').value==='western')return midiToName(n);const tonic=parseInt($('tonic').value,10);const rel=((n-tonic)%12+12)%12;const oct=Math.floor((n-tonic)/12);let label=SARGAM[rel];if(oct<0)label='.' .repeat(Math.min(2,-oct))+label;else if(oct>0)label=label+'\''.repeat(Math.min(2,oct));return label;}
-function noteNumberLabel(midi){return midiLabel(midi)+' · '+midiToName(midi);}
-function fmtTime(s){if(!Number.isFinite(s))return '00:00';const m=Math.floor(Math.max(0,s)/60),sec=Math.floor(Math.max(0,s)%60);return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function normalizeNotes(notes){return notes.map((n,i)=>{const start=Number(n.start),end=Number(n.end),midi=Number.isFinite(n.midi)?Number(n.midi):parseNote(n.note);if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start)throw new Error('Invalid start/end time in note '+(i+1));if(midi<0||midi>127)throw new Error('MIDI note out of range in note '+(i+1));return {start,end,midi,note:midiToName(midi)};}).sort((a,b)=>a.start-b.start);}
-function setReference(title,notes){reference={title:title||'Untitled reference',notes:normalizeNotes(notes)};sessionRows=[];noteAttempts.clear();renderNotes();updateReferenceInfo();drawChart();updateStats();}
-function updateReferenceInfo(){const n=reference.notes.length;const end=n?Math.max(...reference.notes.map(x=>x.end)):0;$('referenceInfo').textContent=n?`${reference.title} · ${n} notes · ${end.toFixed(2)} sec · ${midiToName(Math.min(...reference.notes.map(x=>x.midi)))}–${midiToName(Math.max(...reference.notes.map(x=>x.midi)))}`:'No reference loaded. Add timed notes or import JSON, CSV or MIDI.';}
-function renderNotes(){const tbody=$('noteRows');if(!reference.notes.length){tbody.innerHTML='<tr><td colspan="5" class="muted">No notes yet.</td></tr>';return;}tbody.innerHTML=reference.notes.map((n,i)=>`<tr><td>${i+1}</td><td><input aria-label="Start time" data-i="${i}" data-k="start" type="number" min="0" step="0.05" value="${n.start.toFixed(2)}"></td><td><input aria-label="End time" data-i="${i}" data-k="end" type="number" min="0" step="0.05" value="${n.end.toFixed(2)}"></td><td><input aria-label="Pitch" data-i="${i}" data-k="note" value="${esc(n.note)}"></td><td><button class="danger" data-del="${i}" title="Delete note">✕</button></td></tr>`).join('');}
-$('noteRows').addEventListener('change',e=>{const el=e.target;if(!el.dataset.i)return;const i=Number(el.dataset.i),k=el.dataset.k;try{let n={...reference.notes[i]};if(k==='note'){n.midi=parseNote(el.value);n.note=midiToName(n.midi);}else n[k]=Number(el.value);reference.notes=normalizeNotes(reference.notes.map((x,j)=>j===i?n:x));renderNotes();updateReferenceInfo();drawChart();}catch(err){alert(err.message);renderNotes();}});
-$('noteRows').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;reference.notes.splice(Number(b.dataset.del),1);renderNotes();updateReferenceInfo();drawChart();});
-function addNote(start,end,note){const midi=parseNote(note);if(!(end>start))throw new Error('End time must be after start time.');reference.notes=normalizeNotes([...reference.notes,{start,end,midi}]);renderNotes();updateReferenceInfo();drawChart();}
-$('addNote').addEventListener('click',()=>{try{addNote(Number($('newStart').value),Number($('newEnd').value),$('newNote').value);}catch(e){alert(e.message);}});
-$('addAtPlayhead').addEventListener('click',()=>{const t=Number.isFinite(audio.currentTime)?audio.currentTime:0;const dur=.5;$('newStart').value=t.toFixed(2);$('newEnd').value=(t+dur).toFixed(2);try{addNote(t,t+dur,$('newNote').value);}catch(e){alert(e.message);}});
-$('clearReference').addEventListener('click',()=>{if(confirm('Clear all reference notes?'))setReference('Untitled reference',[]);});
-
-// Fill tonic and transpose controls.
-NOTE_NAMES.forEach((n,i)=>{const opt=document.createElement('option');opt.value=String(60+i);opt.textContent=n+' (Sa)';if(i===0)opt.selected=true;$('tonic').append(opt);});
-for(let i=-12;i<=12;i++){const o=document.createElement('option');o.value=i;o.textContent=(i>0?'+':'')+i+' semitones';if(i===0)o.selected=true;$('transpose').append(o);}
-function currentTranspose(){return Number($('transpose').value)||0;}
-function activeNotes(){return reference.notes.map(n=>({...n,midi:n.midi+currentTranspose()}));}
-function targetAt(songTime){const t=songTime+Number($('offset').value);const notes=activeNotes();let lo=0,hi=notes.length-1;while(lo<=hi){const mid=(lo+hi)>>1,n=notes[mid];if(t<n.start)hi=mid-1;else if(t>=n.end)lo=mid+1;else return n;}return null;}
-$('displayMode').addEventListener('change',()=>{renderNotes();drawChart();updateLive(lastPitch);});$('tonic').addEventListener('change',()=>{drawChart();updateLive(lastPitch);});$('transpose').addEventListener('change',()=>{drawChart();updateLive(lastPitch);});$('offset').addEventListener('input',()=>{$('offsetValue').textContent=Number($('offset').value).toFixed(2)+' s';drawChart();updateLive(lastPitch);});
-
-// Load audio file locally.
-$('audioFile').addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(file);audio.src=audioUrl;$('audioName').textContent=file.name;audio.load();sessionRows=[];noteAttempts.clear();updateStats();});
-audio.addEventListener('loadedmetadata',()=>{updateTime();drawChart();$('loopEnd').placeholder=Number.isFinite(audio.duration)?audio.duration.toFixed(1):'song end';});
-audio.addEventListener('timeupdate',()=>{updateTime();if(!analyser)drawChart();if($('loopEnabled').checked&&!loopGuard){const a=Number($('loopStart').value)||0,b=Number($('loopEnd').value)||audio.duration;if(b>a&&audio.currentTime>=b){loopGuard=true;audio.currentTime=a;audio.play().finally(()=>{loopGuard=false;});}}});
-audio.addEventListener('seeked',()=>{drawChart();});
-audio.addEventListener('play',()=>{drawChart();});
-function updateTime(){const d=Number.isFinite(audio.duration)?audio.duration:0,t=audio.currentTime||0;$('songTime').textContent=fmtTime(t)+' / '+fmtTime(d);$('songProgress').style.width=(d?100*t/d:0)+'%';}
-$('speed').addEventListener('change',()=>{audio.playbackRate=Number($('speed').value);});
-$('pauseBtn').addEventListener('click',()=>audio.pause());$('restartBtn').addEventListener('click',()=>{audio.currentTime=0;sessionRows=[];noteAttempts.clear();updateStats();drawChart();});
-$('playBtn').addEventListener('click',async()=>{if(!audio.src){alert('Upload a song audio file first.');return;}const beats=Number($('countIn').value);if(beats>0){await runCountIn(beats);}try{await audio.play();}catch(e){alert('Could not play audio: '+e.message);}});
-async function runCountIn(beats){const bpm=reference.bpm||80;const interval=60000/bpm;const original=$('playBtn').textContent;for(let i=beats;i>0;i--){$('playBtn').textContent='Count '+i+'…';beep();await new Promise(r=>setTimeout(r,interval));}$('playBtn').textContent=original;}
-function beep(){try{const c=audioContext||new (window.AudioContext||window.webkitAudioContext)();if(!audioContext)audioContext=c;const o=c.createOscillator(),g=c.createGain();o.frequency.value=880;g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.07);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.08);}catch(e){}}
-$('markStart').addEventListener('click',()=>{$('loopStart').value=(audio.currentTime||0).toFixed(2);});$('markEnd').addEventListener('click',()=>{$('loopEnd').value=(audio.currentTime||0).toFixed(2);});
-
-// Microphone and YIN-style pitch estimation.
-async function enableMic(){if(!navigator.mediaDevices?.getUserMedia){alert('Microphone capture is unavailable. Open this site over HTTPS or localhost in a supported browser.');return;}try{micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:false,autoGainControl:false,channelCount:1}});audioContext=new (window.AudioContext||window.webkitAudioContext)();await audioContext.resume();micSource=audioContext.createMediaStreamSource(micStream);analyser=audioContext.createAnalyser();analyser.fftSize=4096;analyser.smoothingTimeConstant=0;micSource.connect(analyser);$('micStatus').textContent='MIC ON';$('micStatus').className='pill good';$('micOn').disabled=true;$('micOff').disabled=false;$('recordBtn').disabled=false;const buf=new Float32Array(analyser.fftSize);const sampleRate=audioContext.sampleRate;const loop=()=>{if(!analyser)return;analyser.getFloatTimeDomainData(buf);const result=yinPitch(buf,sampleRate);if(result&&result.confidence>.78){const midi=69+12*Math.log2(result.freq/440);const p={time:audio.currentTime||0,wall:performance.now()/1000,midi,freq:result.freq,confidence:result.confidence};lastPitch=p;pitchHistory.push(p);if(pitchHistory.length>4){const vals=pitchHistory.slice(-5).map(x=>x.midi).sort((a,b)=>a-b);p.midi=vals[Math.floor(vals.length/2)];p.freq=440*Math.pow(2,(p.midi-69)/12);}recordComparison(p);updateLive(p);}else{lastPitch=null;updateLive(null);}const now=performance.now();if(now-lastDraw>40){drawChart();lastDraw=now;}rafId=requestAnimationFrame(loop);};rafId=requestAnimationFrame(loop);}catch(e){alert('Could not access microphone: '+e.message);}}
-function disableMic(){if(rafId)cancelAnimationFrame(rafId);rafId=null;analyser=null;if(micSource){try{micSource.disconnect();}catch(e){}}if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}if(audioContext){audioContext.close().catch(()=>{});audioContext=null;}micSource=null;$('micStatus').textContent='MIC OFF';$('micStatus').className='pill warn';$('micOn').disabled=false;$('micOff').disabled=true;$('recordBtn').disabled=true;if(recording&&recording.state==='recording')stopRecording();}
-$('micOn').addEventListener('click',enableMic);$('micOff').addEventListener('click',disableMic);
-function yinPitch(input,sr){const factor=2,n=Math.floor(input.length/factor),x=new Float32Array(n);let rms=0;for(let i=0;i<n;i++){x[i]=input[i*factor];rms+=x[i]*x[i];}rms=Math.sqrt(rms/n);if(rms<.009)return null;const rate=sr/factor,minF=70,maxF=1000,minTau=Math.floor(rate/maxF),maxTau=Math.min(Math.floor(rate/minF),Math.floor(n/2)-1);const diff=new Float32Array(maxTau+1),cmnd=new Float32Array(maxTau+1);for(let tau=1;tau<=maxTau;tau++){let sum=0;for(let i=0;i<n-maxTau;i++){const d=x[i]-x[i+tau];sum+=d*d;}diff[tau]=sum;}cmnd[0]=1;let running=0;for(let tau=1;tau<=maxTau;tau++){running+=diff[tau];cmnd[tau]=running?diff[tau]*tau/running:1;}let tauEstimate=-1;for(let tau=minTau;tau<=maxTau;tau++){if(cmnd[tau]<.16){while(tau+1<=maxTau&&cmnd[tau+1]<cmnd[tau])tau++;tauEstimate=tau;break;}}if(tauEstimate<0){let best=1;for(let tau=minTau;tau<=maxTau;tau++){if(cmnd[tau]<best){best=cmnd[tau];tauEstimate=tau;}}if(best>.28)return null;}let better=tauEstimate;if(tauEstimate>1&&tauEstimate<maxTau){const s0=cmnd[tauEstimate-1],s1=cmnd[tauEstimate],s2=cmnd[tauEstimate+1];const denom=2*(2*s1-s2-s0);if(denom)better=tauEstimate+(s2-s0)/denom;}const freq=rate/better;const confidence=1-cmnd[tauEstimate];if(freq<minF||freq>maxF)return null;return {freq,confidence};}
-function updateLive(p){const target=targetAt(audio.currentTime||0);$('youNote').textContent=p?midiLabel(p.midi):'—';$('youFreq').textContent=p?`${p.freq.toFixed(1)} Hz · confidence ${(p.confidence*100).toFixed(0)}%`:'No reliable voiced pitch';$('targetNote').textContent=target?midiLabel(target.midi):'—';$('targetDetail').textContent=target?`${midiToName(target.midi)} · ${target.start.toFixed(2)}–${target.end.toFixed(2)} s`:'No target note at this time';if(p&&target){const cents=1200*Math.log2((440*Math.pow(2,(p.midi-69)/12))/(440*Math.pow(2,(target.midi-69)/12)));const abs=Math.abs(cents),tol=Number($('tolerance').value);$('centsText').textContent=(cents>0?'+':'')+cents.toFixed(0)+' cents';$('pitchStatus').textContent=abs<=tol?'IN TUNE':cents>0?'SHARP':'FLAT';$('pitchStatus').className='pill '+(abs<=tol?'good':'bad');$('needle').style.left=(50+Math.max(-50,Math.min(50,cents))/100*100)+'%';}else{$('centsText').textContent='— cents';$('pitchStatus').textContent=p?'NO TARGET':'WAITING';$('pitchStatus').className='pill';$('needle').style.left='50%';}}
-function recordComparison(p){const target=targetAt(p.time);if(!target)return;const cents=1200*Math.log2(Math.pow(2,(p.midi-target.midi)/12));const row={time:p.time,voiceMidi:p.midi,targetMidi:target.midi,cents,confidence:p.confidence,noteStart:target.start,noteEnd:target.end};sessionRows.push(row);noteAttempts.add(target.start.toFixed(3));updateStats();}
-function updateStats(){const rows=sessionRows;const tol=Number($('tolerance').value);const matched=rows.filter(r=>Math.abs(r.cents)<=tol).length;const avg=rows.length?rows.reduce((s,r)=>s+Math.abs(r.cents),0)/rows.length:null;$('matchRate').textContent=rows.length?(100*matched/rows.length).toFixed(0)+'%':'—';$('meanError').textContent=avg===null?'—':avg.toFixed(0)+'¢';$('sampleCount').textContent=String(rows.length);$('notesCovered').textContent=noteAttempts.size+' / '+reference.notes.length;}
-$('tolerance').addEventListener('change',updateStats);
-
-// Session recording is separate from the backing audio.
-$('recordBtn').addEventListener('click',()=>{if(!micStream)return;const types=['audio/webm;codecs=opus','audio/webm','audio/mp4'];const mime=types.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t));try{recording=new MediaRecorder(micStream,mime?{mimeType:mime}:undefined);recordingChunks=[];recording.ondataavailable=e=>{if(e.data.size)recordingChunks.push(e.data);};recording.onstop=()=>{const blob=new Blob(recordingChunks,{type:recording.mimeType||'audio/webm'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sargam-practice-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);};recording.start();$('recordBtn').disabled=true;$('stopRecordBtn').disabled=false;}catch(e){alert('Recording is not supported in this browser: '+e.message);}});
-function stopRecording(){if(recording&&recording.state==='recording')recording.stop();$('recordBtn').disabled=!micStream;$('stopRecordBtn').disabled=true;}
-$('stopRecordBtn').addEventListener('click',stopRecording);
-$('clearSession').addEventListener('click',()=>{sessionRows=[];noteAttempts.clear();pitchHistory=[];updateStats();drawChart();});
-$('downloadResults').addEventListener('click',()=>{if(!sessionRows.length){alert('No comparison samples yet. Sing while a target note is active.');return;}const lines=['song_time_sec,voice_note,target_note,pitch_error_cents,confidence',...sessionRows.map(r=>[r.time.toFixed(3),midiToName(r.voiceMidi),midiToName(r.targetMidi),r.cents.toFixed(1),r.confidence.toFixed(3)].join(','))];downloadText('sargam-session.csv',lines.join('\n'),'text/csv');});
-
-// Canvas chart: target note blocks + live pitch scatter, on a common time/pitch axis.
-function drawChart(){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;const dpr=window.devicePixelRatio||1;canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const w=rect.width,h=rect.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#0c131e';ctx.fillRect(0,0,w,h);const notes=activeNotes();const audioDur=Number.isFinite(audio.duration)?audio.duration:0;const maxEnd=notes.length?Math.max(...notes.map(n=>n.end)):0;const total=Math.max(audioDur,maxEnd,10);const left=54,right=14,top=18,bottom=30,pw=w-left-right,ph=h-top-bottom;let minMidi=notes.length?Math.min(...notes.map(n=>n.midi)):48,maxMidi=notes.length?Math.max(...notes.map(n=>n.midi)):72;for(const p of sessionRows){minMidi=Math.min(minMidi,p.voiceMidi);maxMidi=Math.max(maxMidi,p.voiceMidi);}minMidi=Math.floor((minMidi-3)/2)*2;maxMidi=Math.ceil((maxMidi+3)/2)*2;if(maxMidi-minMidi<12){minMidi-=6;maxMidi+=6;}const x=t=>left+(t/total)*pw;const y=m=>top+ph-(m-minMidi)/(maxMidi-minMidi)*ph;
-ctx.font='10px system-ui';ctx.textAlign='right';for(let m=minMidi;m<=maxMidi;m+=2){const yy=y(m);ctx.strokeStyle='#202c3e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(w-right,yy);ctx.stroke();ctx.fillStyle='#9aa8bd';ctx.fillText(midiToName(m),left-8,yy+3);}ctx.textAlign='center';const ticks=Math.min(10,Math.max(2,Math.floor(pw/100)));for(let i=0;i<=ticks;i++){const t=total*i/ticks,xx=x(t);ctx.strokeStyle='#182334';ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,h-bottom);ctx.stroke();ctx.fillStyle='#8e9db2';ctx.fillText(t.toFixed(0)+'s',xx,h-9);}
-const refShift=Number($('offset').value)||0;notes.forEach(n=>{const xx=x(n.start-refShift),ww=Math.max(2,x(n.end)-x(n.start)),yy=y(n.midi),hh=Math.max(5,ph/(maxMidi-minMidi)*.66);ctx.fillStyle='#8d7cff55';ctx.strokeStyle='#9b8eff';ctx.lineWidth=1;ctx.beginPath();ctx.roundRect(xx,yy-hh/2,ww,hh,4);ctx.fill();ctx.stroke();if(ww>35){ctx.fillStyle='#e7e2ff';ctx.textAlign='center';ctx.fillText(midiLabel(n.midi),xx+ww/2,yy+3);}});
-// Your measured pitch trace; only points with a reference are shown for direct comparison.
-const rows=sessionRows.slice(-1600);ctx.strokeStyle='#55d8cf';ctx.fillStyle='#55d8cf';ctx.lineWidth=1.5;ctx.beginPath();let started=false,prev=null;rows.forEach(r=>{const xx=x(r.time),yy=y(r.voiceMidi);if(prev&&r.time-prev.time<.3){ctx.lineTo(xx,yy);}else{if(started)ctx.stroke();ctx.beginPath();ctx.moveTo(xx,yy);started=true;}ctx.moveTo(xx,yy);ctx.arc(xx,yy,2.2,0,Math.PI*2);ctx.moveTo(xx,yy);prev=r;});if(started)ctx.stroke();
-if(audio.src){const playX=x(audio.currentTime||0);ctx.strokeStyle='#f0c674';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(playX,top);ctx.lineTo(playX,h-bottom);ctx.stroke();ctx.setLineDash([]);}ctx.textAlign='left';ctx.fillStyle='#9aa8bd';ctx.fillText(notes.length?'Reference notes and detected singing':'No melody reference loaded',left,12);$('chartSummary').textContent=notes.length?`${notes.length} target notes · ${sessionRows.length} aligned pitch samples · chart spans ${total.toFixed(1)} sec`:'Import or create timed reference notes to activate comparison.';}
-window.addEventListener('resize',drawChart);
-
-// JSON and CSV reference import.
-$('refFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const ext=file.name.toLowerCase().split('.').pop();if(ext==='mid'||ext==='midi'){const ab=await file.arrayBuffer();midiTracks=parseMidi(ab);if(!midiTracks.length)throw new Error('No usable note tracks found in MIDI.');const idx=midiTracks.findIndex(t=>t.notes.length);const chosen=midiTracks[idx<0?0:idx];setReference(file.name+' · '+chosen.name,chosen.notes);if(midiTracks.length>1){const choices=midiTracks.map((t,i)=>i+': '+t.name+' ('+t.notes.length+' notes)').join('\n');const answer=prompt('MIDI tracks found. Enter track number to load:\n'+choices,String(idx<0?0:idx));if(answer!==null&&midiTracks[Number(answer)]){const t=midiTracks[Number(answer)];setReference(file.name+' · '+t.name,t.notes);}}}else{const text=await file.text();if(ext==='csv'){setReference(file.name,parseCsv(text));}else{const obj=JSON.parse(text);setReference(obj.title||file.name,obj.notes||obj);if(obj.bpm)reference.bpm=Number(obj.bpm);}}}catch(err){alert('Could not load reference: '+err.message);}e.target.value='';});
-function parseCsv(text){const lines=text.trim().split(/\r?\n/);if(!lines.length)return [];let start=0;if(/start/i.test(lines[0])&&/end/i.test(lines[0]))start=1;return lines.slice(start).filter(Boolean).map((line,i)=>{const p=line.split(',').map(x=>x.trim());if(p.length<3)throw new Error('CSV row '+(i+start+1)+' must have start,end,note');return {start:Number(p[0]),end:Number(p[1]),note:p[2]};});}
-function readVLQ(view,state){let value=0,b;do{if(state.p>=view.byteLength)throw new Error('Unexpected end of MIDI data');b=view.getUint8(state.p++);value=(value<<7)|(b&0x7f);}while(b&0x80);return value;}
-function parseMidi(buffer){const v=new DataView(buffer);let p=0;function tag(){let s='';for(let i=0;i<4;i++)s+=String.fromCharCode(v.getUint8(p++));return s;}if(tag()!=='MThd')throw new Error('Not a Standard MIDI file');const headerLen=v.getUint32(p);p+=4;const format=v.getUint16(p);p+=2;const trackCount=v.getUint16(p);p+=2;const division=v.getUint16(p);p+=2;if(division&0x8000)throw new Error('SMPTE-time MIDI files are not supported; export with PPQ timing.');const ppq=division;p=8+headerLen;const tracks=[],tempos=[{tick:0,us:500000}];
-for(let ti=0;ti<trackCount;ti++){if(p+8>v.byteLength)break;const id=tag(),len=v.getUint32(p);p+=4;const end=Math.min(p+len,v.byteLength);if(id!=='MTrk'){p=end;continue;}const state={p},events=[];let tick=0,running=0,name='Track '+(ti+1);while(state.p<end){tick+=readVLQ(v,state);let status=v.getUint8(state.p);if(status<0x80){if(!running)throw new Error('Invalid MIDI running status');status=running;}else state.p++;if(status===0xff){const type=v.getUint8(state.p++);const l=readVLQ(v,state);if(type===0x03){let s='';for(let j=0;j<l&&state.p<end;j++)s+=String.fromCharCode(v.getUint8(state.p++));name=s||name;}else if(type===0x51&&l===3){const us=(v.getUint8(state.p)<<16)|(v.getUint8(state.p+1)<<8)|v.getUint8(state.p+2);tempos.push({tick,us});state.p+=l;}else state.p+=l;continue;}if(status===0xf0||status===0xf7){const l=readVLQ(v,state);state.p+=l;running=0;continue;}running=status;const type=status>>4;const d1=v.getUint8(state.p++);let d2=0;if(type!==0xc&&type!==0xd)d2=v.getUint8(state.p++);if(type===0x9&&d2>0)events.push({tick,type:'on',midi:d1,vel:d2,ch:status&15});else if(type===0x8||(type===0x9&&d2===0))events.push({tick,type:'off',midi:d1,vel:d2,ch:status&15});}
-const active=new Map(),notes=[];for(const ev of events){const key=ev.ch+':'+ev.midi;if(ev.type==='on'){if(!active.has(key))active.set(key,[]);active.get(key).push(ev.tick);}else if(active.has(key)&&active.get(key).length){const st=active.get(key).shift();if(ev.tick>st)notes.push({startTick:st,endTick:ev.tick,midi:ev.midi});}}tracks.push({name,notes});p=end;}
-tempos.sort((a,b)=>a.tick-b.tick);function tickSec(t){let sec=0,last=0,us=500000;for(const tempo of tempos){if(tempo.tick>t)break;sec+=(tempo.tick-last)*us/(ppq*1e6);last=tempo.tick;us=tempo.us;}return sec+(t-last)*us/(ppq*1e6);}return tracks.map(t=>({name:t.name,notes:t.notes.map(n=>({start:tickSec(n.startTick),end:tickSec(n.endTick),midi:n.midi})).sort((a,b)=>a.start-b.start)}));}
-
-$('downloadTemplate').addEventListener('click',()=>{const example={title:'My song melody',bpm:80,notes:[{start:0,end:.45,note:'A3'},{start:.5,end:.95,note:'C4'},{start:1,end:1.45,note:'D4'},{start:1.5,end:2,note:'C4'}]};downloadText('melody-template.json',JSON.stringify(example,null,2),'application/json');});
-$('demoBtn').addEventListener('click',()=>{const demo=[{start:0,end:.42,note:'C4'},{start:.5,end:.92,note:'D4'},{start:1,end:1.42,note:'E4'},{start:1.5,end:1.92,note:'G4'},{start:2,end:2.42,note:'E4'},{start:2.5,end:2.92,note:'D4'},{start:3,end:3.8,note:'C4'}];setReference('Original demo melody',demo);reference.bpm=80;});
-$('saveReference').addEventListener('click',()=>{try{localStorage.setItem('sargam-pitch-reference',JSON.stringify(reference));$('referenceInfo').textContent+=' · Saved locally';}catch(e){alert('Could not save in browser storage: '+e.message);}});
-try{const saved=localStorage.getItem('sargam-pitch-reference');if(saved){const obj=JSON.parse(saved);setReference(obj.title||'Saved reference',obj.notes||[]);}}catch(e){}
-function downloadText(name,text,type){const b=new Blob([text],{type}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),5000);}
-// Tabs
-for(const tab of document.querySelectorAll('.tab'))tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab.dataset.tab));});
-// Clean up mic if page is closed.
-window.addEventListener('beforeunload',()=>{if(micStream)micStream.getTracks().forEach(t=>t.stop());if(audioUrl)URL.revokeObjectURL(audioUrl);});
-updateReferenceInfo();updateStats();updateTime();drawChart();
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var names=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+var swaraNames=["Sa","Komal Re","Re","Komal Ga","Ga","Ma","Tivra Ma","Pa","Komal Dha","Dha","Komal Ni","Ni"];
+var offsets={S:0,r:1,R:2,g:3,G:4,M:5,m:6,P:7,d:8,D:9,n:10,N:11};
+var aliases={sa:"S",re:"R",ga:"G",ma:"M",pa:"P",dha:"D",ni:"N",s:"S",komalre:"r",komalga:"g",tivrama:"m",komaldha:"d",komalni:"n"};
+var devan={"सा":0,"स":0,"रे":2,"र":2,"ग":4,"गा":4,"म":5,"मा":5,"प":7,"पा":7,"ध":9,"धा":9,"नि":11,"नी":11,"सां":12};
+var saMidi=48,sequence=[],seqIndex=0,history=[],samples=[],matched=new Set(),micStream=null,audioContext=null,analyser=null,raf=null,rec=null,recChunks=[],pitchBuffer=[],autoTimer=null,lastPitch=null,lastProcess=0,lastDraw=0,backingUrl=null;
+var canvas=$("pitchChart"),ctx=canvas.getContext("2d");
+function hz(m){return 440*Math.pow(2,(m-69)/12);}
+function midiFromHz(h){return 69+12*Math.log2(h/440);}
+function noteName(m){var n=Math.round(m);return names[((n%12)+12)%12]+(Math.floor(n/12)-1);}
+function sargamName(m){var d=Math.round(m-saMidi),oct=Math.floor(d/12),pc=((d%12)+12)%12,t=swaraNames[pc];return oct<0?"."+t:oct>0?t+"'":t;}
+function noteHz(m){return hz(m).toFixed(2)+" Hz";}
+function parseToken(raw){
+ var t=String(raw).trim().replace(/^[\[\{]+|[\]\}]+$/g,"").replace(/[।॥,;]+$/g,"");
+ if(!t||t==="|"||t==="-"||t==="—"||t==="0")return null;
+ var lowerOct=(t.match(/^\.+/)||[""])[0].length,upperOct=(t.match(/['’′]+$/)||[""])[0].length,oct=upperOct-lowerOct;
+ t=t.replace(/^\.+/,"").replace(/['’′]+$/,"").replace(/-+$/,"");
+ var key=t.toLowerCase();if(aliases[key])t=aliases[key];
+ var n=null;
+ if(Object.prototype.hasOwnProperty.call(offsets,t))n=offsets[t];
+ else{
+  var mark=t.match(/^(.*?)(?:\((k|komal|t|tivra)\))$/i);
+  if(mark){var root=mark[1],kind=mark[2].toLowerCase(),v=devan[root];if(typeof v==="number")n=v+(kind==="k"||kind==="komal"?-1:1);else{var a=aliases[root.toLowerCase()]||root;if(Object.prototype.hasOwnProperty.call(offsets,a))n=offsets[a]+(kind==="k"||kind==="komal"?-1:1);}}
+  else if(typeof devan[t]==="number")n=devan[t];
+  else if(typeof devan[t.replace(/[ंँ]$/,"")]==="number"){n=devan[t.replace(/[ंँ]$/,"")];oct++;}
+ }
+ if(n===null)return {error:"Unrecognized swara: "+raw};
+ while(n<0){n+=12;oct--;}while(n>=12){n-=12;oct++;}
+ return {name:raw,offset:n+12*oct};
+}
+function parseText(text){
+ var cleaned=String(text||"").replace(/\r/g,"\n").replace(/कोमल\s*रे/g,"रे(k)").replace(/कोमल\s*ग/g,"ग(k)").replace(/कोमल\s*ध/g,"ध(k)").replace(/कोमल\s*नि/g,"नि(k)").replace(/तीव्र\s*म/g,"म(t)").replace(/[|।॥,;]+/g," ");
+ var raw=cleaned.split(/\s+/).filter(Boolean),notes=[],errors=[];
+ raw.forEach(function(token){var p=parseToken(token);if(p){if(p.error)errors.push(p.error);else notes.push(p);}});
+ return {notes:notes,errors:errors};
+}
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}$("autoPlay").textContent="▶ Start sequence";$("autoPlay").className="good";}
+function setSequence(notes,title){
+ stopAuto();sequence=notes;seqIndex=0;renderSequence();updateTarget();updateStats();
+ $("parseStatus").className=notes.length?"success":"info";
+ $("parseStatus").textContent=notes.length?(title||"Sargam loaded")+": "+notes.length+" swaras ready. Choose Sa and practise.":"No valid swaras found. Check notation format.";
+}
+function loadText(text,title){
+ var r=parseText(text);setSequence(r.notes,title);
+ if(r.errors.length){$("parseStatus").className="notice";$("parseStatus").textContent="Loaded "+r.notes.length+" notes; skipped unknown tokens: "+r.errors.slice(0,5).join(", ");}
+}
+$("loadNotation").addEventListener("click",function(){loadText($("notation").value,"Pasted Sargam");});
+$("sampleNotation").addEventListener("click",function(){$("notation").value="S R G M P D N S' | S' N D P M G R S";loadText($("notation").value,"Sample Sargam");});
+$("notationFile").addEventListener("change",async function(e){
+ var f=e.target.files&&e.target.files[0];if(!f)return;
+ try{var txt=await f.text(),ext=f.name.toLowerCase().split(".").pop();
+  if(ext==="json"){var o=JSON.parse(txt);if(Array.isArray(o))txt=o.map(function(x){return typeof x==="string"?x:(x.swara||x.token||x.sargam||x.note||"");}).join(" ");else if(Array.isArray(o.notes))txt=o.notes.map(function(x){return typeof x==="string"?x:(x.swara||x.token||x.sargam||x.note||"");}).join(" ");else txt=o.notation||o.sargam||"";}
+  if(ext==="csv"){var lines=txt.split(/\r?\n/).filter(Boolean);txt=lines.slice(/^(swara|token|note|notation)/i.test(lines[0])?1:0).map(function(l){return l.split(",")[0].trim();}).join(" ");}
+  $("notation").value=txt;loadText(txt,f.name);
+ }catch(err){$("parseStatus").className="notice";$("parseStatus").textContent="Could not read file: "+err.message;}
+ e.target.value="";
+});
+function populateScale(){
+ for(var m=33;m<=84;m++){var o=document.createElement("option");o.value=String(m);o.textContent=noteName(m)+" · "+hz(m).toFixed(2)+" Hz";if(m===48)o.selected=true;$("saSelect").appendChild(o);}
+ for(var t=-12;t<=12;t++){var x=document.createElement("option");x.value=String(t);x.textContent=(t>0?"+":"")+t+" semitones";if(t===0)x.selected=true;$("transpose").appendChild(x);}
+}
+function updateScale(){saMidi=Number($("saSelect").value)+(Number($("transpose").value)||0);$("saName").textContent=noteName(saMidi);$("saHz").textContent=noteHz(saMidi);$("transposeLabel").textContent=(Number($("transpose").value)>0?"+":"")+String(Number($("transpose").value)||0);renderSequence();updateTarget();drawChart();}
+$("saSelect").addEventListener("change",updateScale);$("transpose").addEventListener("change",updateScale);
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function renderSequence(){
+ var box=$("swaraList");
+ if(!sequence.length){box.innerHTML='<div class="hint">Load Sargam to see the notes here.</div>';$("notationPreview").innerHTML="";return;}
+ box.innerHTML=sequence.map(function(n,i){var m=saMidi+n.offset;return '<button class="swara '+(i===seqIndex?"active":"")+'" data-index="'+i+'"><span class="num">'+(i+1)+'</span><span><span class="symbol">'+esc(n.name)+'</span><br><span class="hint">'+swaraNames[((n.offset%12)+12)%12]+'</span></span><span class="noteinfo">'+noteName(m)+'<br>'+noteHz(m)+'</span></button>';}).join("");
+ $("notationPreview").innerHTML=sequence.map(function(n,i){return '<span class="token '+(i===seqIndex?"current":"")+'">'+esc(n.name)+'</span>';}).join("");
+}
+$("swaraList").addEventListener("click",function(e){var b=e.target.closest("[data-index]");if(!b)return;seqIndex=Number(b.dataset.index);renderSequence();updateTarget();});
+function target(){if(!sequence.length||seqIndex<0||seqIndex>=sequence.length)return null;return {midi:saMidi+sequence[seqIndex].offset,name:sequence[seqIndex].name,index:seqIndex};}
+function updateTarget(){
+ var t=target();if(!t){$("targetSargam").textContent="—";$("targetWestern").textContent="—";$("targetHz").textContent="—";$("targetPosition").textContent="Load notation to begin";$("targetLiveHz").textContent="— Hz";$("matchStatus").textContent="NO TARGET";$("matchStatus").className="badge";drawChart();return;}
+ $("targetSargam").textContent=t.name+" · "+sargamName(t.midi);$("targetWestern").textContent=noteName(t.midi);$("targetHz").textContent=noteHz(t.midi);$("targetPosition").textContent="Swara "+(t.index+1)+" of "+sequence.length;$("targetLiveHz").textContent=noteHz(t.midi);renderSequence();updateLive(lastPitch);drawChart();
+}
+function updateLive(p){
+ var t=target();
+ if(p){var rounded=Math.round(p.midi),c=(p.midi-rounded)*100;$("liveNote").textContent=noteName(rounded);$("liveSargam").textContent=sargamName(rounded)+" · "+Math.round(p.confidence*100)+"% confidence";$("liveHz").textContent=p.freq.toFixed(2)+" Hz";$("liveCents").textContent="Nearest note: "+(c>0?"+":"")+c.toFixed(0)+" cents";}
+ else{$("liveNote").textContent="—";$("liveSargam").textContent="No stable voice pitch";$("liveHz").textContent="— Hz";$("liveCents").textContent="Nearest-note deviation: —";}
+ if(t&&p){var d=(p.midi-t.midi)*100,ok=Math.abs(d)<=50;$("deviation").textContent=(d>0?"+":"")+d.toFixed(0)+" cents";$("matchStatus").textContent=ok?"IN TUNE":d>0?"TOO HIGH":"TOO LOW";$("matchStatus").className="badge "+(ok?"ok":"warn");$("tuneMeter").style.width=Math.max(2,Math.min(100,50+d/4))+"%";}
+ else{$("deviation").textContent="— cents";$("matchStatus").textContent=t?"SING TARGET":"NO TARGET";$("matchStatus").className="badge";$("tuneMeter").style.width="2px";}
+}
+$("nextNote").addEventListener("click",function(){if(sequence.length){seqIndex=Math.min(sequence.length-1,seqIndex+1);updateTarget();}});
+$("prevNote").addEventListener("click",function(){if(sequence.length){seqIndex=Math.max(0,seqIndex-1);updateTarget();}});
+function playTone(m,duration){
+ try{var C=window.AudioContext||window.webkitAudioContext;if(!audioContext)audioContext=new C();if(audioContext.state==="suspended")audioContext.resume();var osc=audioContext.createOscillator(),gain=audioContext.createGain(),now=audioContext.currentTime;osc.type="sine";osc.frequency.value=hz(m);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.13,now+.025);gain.gain.setValueAtTime(.13,now+Math.max(.05,duration-.08));gain.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(now+duration+.02);}catch(e){$("micDiagnostic").textContent="Could not play target tone: "+e.message;}
+}
+$("playTarget").addEventListener("click",function(){var t=target();if(t)playTone(t.midi,.9);});
+$("autoPlay").addEventListener("click",function(){
+ if(autoTimer){stopAuto();return;}if(!sequence.length){$("micDiagnostic").textContent="Load a Sargam first.";return;}
+ seqIndex=0;updateTarget();var interval=Math.max(350,Number($("noteSeconds").value)*1000);$("autoPlay").textContent="Ⅱ Stop sequence";$("autoPlay").className="primary";
+ autoTimer=setInterval(function(){if(seqIndex>=sequence.length-1){stopAuto();return;}seqIndex++;updateTarget();},interval);
+});
+function yin(input,sr){
+ var factor=4,n=Math.floor(input.length/factor),x=new Float32Array(n),sum=0;
+ for(var i=0;i<n;i++){var v=input[i*factor];x[i]=v;sum+=v*v;}
+ var rms=Math.sqrt(sum/n);if(rms<.0025)return {voiced:false,rms:rms};
+ var rate=sr/factor,minF=62,maxF=1100,minTau=Math.max(2,Math.floor(rate/maxF)),maxTau=Math.min(Math.floor(rate/minF),n-3);
+ var cmnd=new Float32Array(maxTau+1),running=0;
+ for(var tau=1;tau<=maxTau;tau++){var d=0,lim=n-tau;for(var j=0;j<lim;j++){var z=x[j]-x[j+tau];d+=z*z;}running+=d;cmnd[tau]=running?d*tau/running:1;}
+ var est=-1;
+ for(var lag=minTau;lag<=maxTau;lag++){if(cmnd[lag]<.18){while(lag+1<=maxTau&&cmnd[lag+1]<cmnd[lag])lag++;est=lag;break;}}
+ if(est<0){var best=1;for(var q=minTau;q<=maxTau;q++){if(cmnd[q]<best){best=cmnd[q];est=q;}}if(best>.42)return {voiced:false,rms:rms};}
+ var refined=est;if(est>1&&est<maxTau){var a=cmnd[est-1],b=cmnd[est],c=cmnd[est+1],den=2*(2*b-c-a);if(den!==0)refined=est+(c-a)/den;}
+ var f=rate/refined,confidence=1-cmnd[est];if(f<minF||f>maxF||!isFinite(f))return {voiced:false,rms:rms};return {voiced:true,freq:f,midi:69+12*Math.log2(f/440),confidence:confidence,rms:rms};
+}
+function med(a){var x=a.slice().sort(function(a,b){return a-b;});return x[Math.floor(x.length/2)];}
+async function enableMic(){
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$("micDiagnostic").textContent="Microphone unavailable. Open the site over HTTPS and allow microphone permission.";return;}
+ try{
+  micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1}});
+  var C=window.AudioContext||window.webkitAudioContext;audioContext=audioContext||new C();await audioContext.resume();
+  var source=audioContext.createMediaStreamSource(micStream);analyser=audioContext.createAnalyser();analyser.fftSize=8192;analyser.smoothingTimeConstant=0;source.connect(analyser);
+  $("micStatus").textContent="MICROPHONE ON";$("micStatus").className="badge ok";$("micOn").disabled=true;$("micOff").disabled=false;$("recordOn").disabled=false;
+  $("micDiagnostic").className="info";$("micDiagnostic").textContent="Microphone active. Sing a steady vowel such as aa. The tuner needs no song or notation.";
+  var buffer=new Float32Array(analyser.fftSize);lastProcess=0;
+  function loop(now){
+   if(!analyser)return;
+   if(now-lastProcess>55){
+    lastProcess=now;analyser.getFloatTimeDomainData(buffer);var result=yin(buffer,audioContext.sampleRate);
+    var level=Math.min(100,Math.max(0,Math.round(result.rms*900)));$("inputMeter").style.width=level+"%";$("inputLevel").textContent=level+"%";
+    if(result.voiced&&result.confidence>.48){
+     pitchBuffer.push(result.midi);if(pitchBuffer.length>5)pitchBuffer.shift();var m=med(pitchBuffer),f=hz(m);
+     lastPitch={time:performance.now()/1000,midi:m,freq:f,confidence:result.confidence,rms:result.rms};
+     $("micDiagnostic").className="success";$("micDiagnostic").textContent="Pitch detected · confidence "+Math.round(result.confidence*100)+"% · input "+level+"%.";
+     history.push({time:lastPitch.time,midi:m,target:target()?target().midi:null});if(history.length>1500)history.splice(0,history.length-1500);
+     if(target()){var error=(m-target().midi)*100;samples.push({time:lastPitch.time,midi:m,target:target().midi,error:error,index:seqIndex});if(samples.length>12000)samples.shift();if(Math.abs(error)<=50)matched.add(seqIndex);}
+     updateLive(lastPitch);updateStats();
+    }else{
+     lastPitch=null;updateLive(null);
+     if(level<2){$("micDiagnostic").className="notice";$("micDiagnostic").textContent="Mic is on, but input level is very low. Check the microphone selected by your operating system and its input volume.";}
+     else{$("micDiagnostic").className="info";$("micDiagnostic").textContent="Audio is reaching the mic but no stable pitch was found. Hold a steady aa vowel and reduce background music.";}
+    }
+   }
+   if(now-lastDraw>70){drawChart();lastDraw=now;}raf=requestAnimationFrame(loop);
+  }
+  raf=requestAnimationFrame(loop);
+ }catch(e){$("micStatus").textContent="MIC ERROR";$("micStatus").className="badge warn";$("micDiagnostic").className="notice";$("micDiagnostic").textContent="Could not start microphone: "+e.message+" Check browser and operating-system permissions.";}
+}
+function stopMic(){if(raf)cancelAnimationFrame(raf);raf=null;analyser=null;if(micStream){micStream.getTracks().forEach(function(t){t.stop();});micStream=null;}$("micStatus").textContent="MICROPHONE OFF";$("micStatus").className="badge warn";$("micOn").disabled=false;$("micOff").disabled=true;$("recordOn").disabled=true;if(rec&&rec.state==="recording")stopRecording();}
+$("micOn").addEventListener("click",enableMic);$("micOff").addEventListener("click",stopMic);
+function updateStats(){var n=samples.length,good=samples.filter(function(s){return Math.abs(s.error)<=50;}).length,avg=n?samples.reduce(function(a,s){return a+Math.abs(s.error);},0)/n:0;$("matchRate").textContent=n?Math.round(good/n*100)+"%":"—";$("avgError").textContent=n?avg.toFixed(0)+"¢":"—";$("sampleCount").textContent=String(history.length);$("notesMatched").textContent=matched.size+" / "+sequence.length;}
+function drawChart(){
+ var box=canvas.getBoundingClientRect();if(!box.width||!box.height)return;var dpr=window.devicePixelRatio||1,w=box.width,h=box.height;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);ctx.fillStyle="#0a121d";ctx.fillRect(0,0,w,h);
+ var now=performance.now()/1000,minT=now-12,maxT=now,pts=history.filter(function(p){return p.time>=minT;});var minM=36,maxM=84;
+ pts.forEach(function(p){minM=Math.min(minM,p.midi);maxM=Math.max(maxM,p.midi);if(p.target!==null){minM=Math.min(minM,p.target);maxM=Math.max(maxM,p.target);}});
+ minM=Math.max(24,Math.floor((minM-3)/2)*2);maxM=Math.min(96,Math.ceil((maxM+3)/2)*2);var L=54,R=12,T=18,B=28,pw=w-L-R,ph=h-T-B;
+ function X(t){return L+(t-minT)/(maxT-minT)*pw;}function Y(m){return T+ph-(m-minM)/(maxM-minM)*ph;}
+ ctx.font="10px system-ui";ctx.textAlign="right";
+ for(var m=Math.ceil(minM/2)*2;m<=maxM;m+=2){var yy=Y(m);ctx.strokeStyle="#202c3d";ctx.beginPath();ctx.moveTo(L,yy);ctx.lineTo(w-R,yy);ctx.stroke();ctx.fillStyle="#a2b0c3";ctx.fillText(noteName(m),L-7,yy+3);}
+ ctx.textAlign="center";for(var i=0;i<=6;i++){var t=minT+(maxT-minT)*i/6,xx=X(t);ctx.strokeStyle="#182436";ctx.beginPath();ctx.moveTo(xx,T);ctx.lineTo(xx,h-B);ctx.stroke();ctx.fillStyle="#8e9db2";ctx.fillText((maxT-t).toFixed(0)+"s",xx,h-9);}
+ var tg=target();if(tg){ctx.strokeStyle="#9a8cff";ctx.lineWidth=2;ctx.setLineDash([6,4]);ctx.beginPath();ctx.moveTo(L,Y(tg.midi));ctx.lineTo(w-R,Y(tg.midi));ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#bdb4ff";ctx.textAlign="left";ctx.fillText("Target "+noteName(tg.midi),L+5,Math.max(12,Y(tg.midi)-7));}
+ if(pts.length){ctx.strokeStyle="#55d8cf";ctx.lineWidth=2;ctx.beginPath();pts.forEach(function(p,i){if(i===0)ctx.moveTo(X(p.time),Y(p.midi));else ctx.lineTo(X(p.time),Y(p.midi));});ctx.stroke();pts.forEach(function(p){ctx.fillStyle="#55d8cf";ctx.beginPath();ctx.arc(X(p.time),Y(p.midi),2.5,0,Math.PI*2);ctx.fill();});}
+ else{ctx.fillStyle="#8697ad";ctx.textAlign="center";ctx.font="12px system-ui";ctx.fillText("Waiting for a stable vocal pitch…",L+pw/2,T+ph/2);}
+ $("chartHint").textContent=pts.length?pts.length+" pitch samples in the last 12 seconds.":"Tuner works independently. Enable mic and sing any note to start the chart.";
+}
+$("clearChart").addEventListener("click",function(){history=[];drawChart();});
+$("clearStats").addEventListener("click",function(){samples=[];matched.clear();history=[];pitchBuffer=[];updateStats();drawChart();});
+$("exportCsv").addEventListener("click",function(){if(!history.length)return;var rows=["time_seconds,frequency_hz,note,sargam,confidence"].concat(history.map(function(p){return [p.time.toFixed(3),hz(p.midi).toFixed(2),noteName(p.midi),sargamName(p.midi),p.confidence||""].join(",");}));download("sargam-live-pitch.csv",rows.join("\n"),"text/csv");});
+$("exportSargam").addEventListener("click",function(){if(!sequence.length)return;download("sargam-reference.json",JSON.stringify({title:"Sargam reference",notation:$("notation").value,notes:sequence.map(function(n){return n.name;})},null,2),"application/json");});
+function download(name,data,type){var blob=new Blob([data],{type:type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(url);},5000);}
+$("recordOn").addEventListener("click",function(){if(!micStream)return;try{var types=["audio/webm;codecs=opus","audio/webm","audio/mp4"],mime=types.find(function(t){return window.MediaRecorder&&MediaRecorder.isTypeSupported(t);});rec=new MediaRecorder(micStream,mime?{mimeType:mime}:undefined);recChunks=[];rec.ondataavailable=function(e){if(e.data.size)recChunks.push(e.data);};rec.onstop=function(){var blob=new Blob(recChunks,{type:rec.mimeType||"audio/webm"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="sargam-voice-"+Date.now()+".webm";a.click();setTimeout(function(){URL.revokeObjectURL(url);},10000);};rec.start();$("recordOn").disabled=true;$("recordOff").disabled=false;}catch(e){$("micDiagnostic").textContent="Recording unavailable: "+e.message;}});
+function stopRecording(){if(rec&&rec.state==="recording")rec.stop();$("recordOn").disabled=!micStream;$("recordOff").disabled=true;}
+$("recordOff").addEventListener("click",stopRecording);
+$("backingFile").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(!f)return;if(backingUrl)URL.revokeObjectURL(backingUrl);backingUrl=URL.createObjectURL(f);$("backingAudio").src=backingUrl;$("backingAudio").load();});
+document.querySelectorAll(".tab").forEach(function(tab){tab.addEventListener("click",function(){document.querySelectorAll(".tab").forEach(function(t){t.classList.toggle("active",t===tab);});document.querySelectorAll(".tabcontent").forEach(function(p){p.classList.toggle("hidden",p.id!=="tab-"+tab.dataset.tab);});});});
+window.addEventListener("resize",drawChart);window.addEventListener("beforeunload",function(){stopAuto();if(micStream)micStream.getTracks().forEach(function(t){t.stop();});if(audioContext&&audioContext.state!=="closed")audioContext.close();if(backingUrl)URL.revokeObjectURL(backingUrl);});
+populateScale();updateScale();drawChart();updateStats();
 })();
 </script>
 </body>
