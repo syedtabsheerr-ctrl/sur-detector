@@ -1,0 +1,10 @@
+{
+  "title": "My song melody",
+  "bpm": 80,
+  "notes": [
+    { "start": 0.00, "end": 0.45, "note": "A3" },
+    { "start": 0.50, "end": 0.95, "note": "C4" },
+    { "start": 1.00, "end": 1.45, "note": "D4" },
+    { "start": 1.50, "end": 2.00, "note": "C4" }
+  ]
+}
