@@ -92,7 +92,7 @@ var swaraNames=["Sa","Komal Re","Re","Komal Ga","Ga","Ma","Tivra Ma","Pa","Komal
 var offsets={S:0,r:1,R:2,g:3,G:4,M:5,m:6,P:7,d:8,D:9,n:10,N:11};
 var aliases={sa:"S",re:"R",ga:"G",ma:"M",pa:"P",dha:"D",ni:"N",s:"S",komalre:"r",komalga:"g",tivrama:"m",komaldha:"d",komalni:"n"};
 var devan={"सा":0,"स":0,"रे":2,"र":2,"ग":4,"गा":4,"म":5,"मा":5,"प":7,"पा":7,"ध":9,"धा":9,"नि":11,"नी":11,"सां":12};
-var saMidi=48,sequence=[],seqIndex=0,history=[],samples=[],matched=new Set(),micStream=null,audioContext=null,analyser=null,raf=null,rec=null,recChunks=[],pitchBuffer=[],autoTimer=null,lastPitch=null,lastProcess=0,lastDraw=0,backingUrl=null;
+var saMidi=48,sequence=[],seqIndex=0,history=[],samples=[],matched=new Set(),micStream=null,micSource=null,audioContext=null,analyser=null,raf=null,rec=null,recChunks=[],pitchBuffer=[],autoTimer=null,lastPitch=null,lastProcess=0,lastDraw=0,backingUrl=null;
 var canvas=$("pitchChart"),ctx=canvas.getContext("2d");
 function hz(m){return 440*Math.pow(2,(m-69)/12);}
 function midiFromHz(h){return 69+12*Math.log2(h/440);}
@@ -201,7 +201,7 @@ async function enableMic(){
   var audioConstraints={echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1};var selectedDevice=$("micDevice").value;if(selectedDevice)audioConstraints.deviceId={exact:selectedDevice};micStream=await navigator.mediaDevices.getUserMedia({audio:audioConstraints});
   await refreshMics();
   var C=window.AudioContext||window.webkitAudioContext;audioContext=audioContext||new C();await audioContext.resume();
-  var source=audioContext.createMediaStreamSource(micStream);analyser=audioContext.createAnalyser();analyser.fftSize=8192;analyser.smoothingTimeConstant=0;source.connect(analyser);
+  micSource=audioContext.createMediaStreamSource(micStream);analyser=audioContext.createAnalyser();analyser.fftSize=8192;analyser.smoothingTimeConstant=0;micSource.connect(analyser);
   $("micStatus").textContent="MICROPHONE ON";$("micStatus").className="badge ok";$("micOn").disabled=true;$("micOff").disabled=false;$("recordOn").disabled=false;
   $("micDiagnostic").className="info";$("micDiagnostic").textContent="Microphone active. Sing a steady vowel such as aa. The tuner needs no song or notation.";
   var buffer=new Float32Array(analyser.fftSize);lastProcess=0;
@@ -228,7 +228,7 @@ async function enableMic(){
   raf=requestAnimationFrame(loop);
  }catch(e){$("micStatus").textContent="MIC ERROR";$("micStatus").className="badge warn";$("micDiagnostic").className="notice";$("micDiagnostic").textContent="Could not start microphone: "+e.message+" Check browser and operating-system permissions.";}
 }
-function stopMic(){if(raf)cancelAnimationFrame(raf);raf=null;analyser=null;if(micStream){micStream.getTracks().forEach(function(t){t.stop();});micStream=null;}$("micStatus").textContent="MICROPHONE OFF";$("micStatus").className="badge warn";$("micOn").disabled=false;$("micOff").disabled=true;$("recordOn").disabled=true;if(rec&&rec.state==="recording")stopRecording();}
+function stopMic(){if(raf)cancelAnimationFrame(raf);raf=null;if(micSource){try{micSource.disconnect();}catch(e){}micSource=null;}analyser=null;if(micStream){micStream.getTracks().forEach(function(t){t.stop();});micStream=null;}$("micStatus").textContent="MICROPHONE OFF";$("micStatus").className="badge warn";$("micOn").disabled=false;$("micOff").disabled=true;$("recordOn").disabled=true;if(rec&&rec.state==="recording")stopRecording();}
 $("micOn").addEventListener("click",enableMic);$("micOff").addEventListener("click",stopMic);
 $("micDevice").addEventListener("change",function(){if(micStream){stopMic();enableMic();}});
 async function refreshMics(){try{var devices=await navigator.mediaDevices.enumerateDevices(),inputs=devices.filter(function(d){return d.kind==="audioinput";}),select=$("micDevice"),current=select.value;select.innerHTML='<option value="">System default input</option>';inputs.forEach(function(d,i){var o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||("Microphone "+(i+1));select.appendChild(o);});if(current&&inputs.some(function(d){return d.deviceId===current;}))select.value=current;}catch(e){$("micDiagnostic").textContent="Could not list microphone devices: "+e.message;}}
