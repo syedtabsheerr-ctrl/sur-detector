@@ -125,7 +125,7 @@ function parseText(text){
 }
 function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}$("autoPlay").textContent="▶ Start sequence";$("autoPlay").className="good";}
 function setSequence(notes,title){
- stopAuto();sequence=notes;seqIndex=0;renderSequence();updateTarget();updateStats();
+ stopAuto();sequence=notes;seqIndex=0;samples=[];matched.clear();renderSequence();updateTarget();updateStats();
  $("parseStatus").className=notes.length?"success":"info";
  $("parseStatus").textContent=notes.length?(title||"Sargam loaded")+": "+notes.length+" swaras ready. Choose Sa and practise.":"No valid swaras found. Check notation format.";
 }
@@ -148,7 +148,7 @@ function populateScale(){
  for(var m=33;m<=84;m++){var o=document.createElement("option");o.value=String(m);o.textContent=noteName(m)+" · "+hz(m).toFixed(2)+" Hz";if(m===48)o.selected=true;$("saSelect").appendChild(o);}
  for(var t=-12;t<=12;t++){var x=document.createElement("option");x.value=String(t);x.textContent=(t>0?"+":"")+t+" semitones";if(t===0)x.selected=true;$("transpose").appendChild(x);}
 }
-function updateScale(){saMidi=Number($("saSelect").value)+(Number($("transpose").value)||0);$("saName").textContent=noteName(saMidi);$("saHz").textContent=noteHz(saMidi);$("transposeLabel").textContent=(Number($("transpose").value)>0?"+":"")+String(Number($("transpose").value)||0);renderSequence();updateTarget();drawChart();}
+function updateScale(){saMidi=Number($("saSelect").value)+(Number($("transpose").value)||0);$("saName").textContent=noteName(saMidi);$("saHz").textContent=noteHz(saMidi);$("transposeLabel").textContent=(Number($("transpose").value)>0?"+":"")+String(Number($("transpose").value)||0);samples=[];matched.clear();renderSequence();updateTarget();updateStats();drawChart();}
 $("saSelect").addEventListener("change",updateScale);$("transpose").addEventListener("change",updateScale);
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 function renderSequence(){
@@ -230,6 +230,7 @@ async function enableMic(){
 }
 function stopMic(){if(raf)cancelAnimationFrame(raf);raf=null;analyser=null;if(micStream){micStream.getTracks().forEach(function(t){t.stop();});micStream=null;}$("micStatus").textContent="MICROPHONE OFF";$("micStatus").className="badge warn";$("micOn").disabled=false;$("micOff").disabled=true;$("recordOn").disabled=true;if(rec&&rec.state==="recording")stopRecording();}
 $("micOn").addEventListener("click",enableMic);$("micOff").addEventListener("click",stopMic);
+$("micDevice").addEventListener("change",function(){if(micStream){stopMic();enableMic();}});
 async function refreshMics(){try{var devices=await navigator.mediaDevices.enumerateDevices(),inputs=devices.filter(function(d){return d.kind==="audioinput";}),select=$("micDevice"),current=select.value;select.innerHTML='<option value="">System default input</option>';inputs.forEach(function(d,i){var o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||("Microphone "+(i+1));select.appendChild(o);});if(current&&inputs.some(function(d){return d.deviceId===current;}))select.value=current;}catch(e){$("micDiagnostic").textContent="Could not list microphone devices: "+e.message;}}
 $("refreshMics").addEventListener("click",refreshMics);
 if(navigator.mediaDevices&&navigator.mediaDevices.addEventListener)navigator.mediaDevices.addEventListener("devicechange",refreshMics);
