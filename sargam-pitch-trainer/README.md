@@ -12,7 +12,7 @@ https://syedtabsheerr-ctrl.github.io/sur-detector/sargam-pitch-trainer/
 
 1. Open the app over HTTPS.
 2. Click Enable microphone and allow access.
-3. Sing a steady vowel such as aa. Your note and frequency should appear even before you load Sargam.
+3. After enabling the mic, use the Microphone Input selector to choose the correct device (click Refresh devices if needed). Sing a steady vowel such as aa. Your note and frequency should appear even before you load Sargam.
 4. Paste notation or upload a TXT, JSON or CSV Sargam file.
 5. Choose Sa and its octave, such as C3, D3 or A2.
 6. Select a swara, sing it, and compare your note and frequency with the target.
